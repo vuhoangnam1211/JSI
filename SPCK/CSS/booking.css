@@ -1,0 +1,405 @@
+/* ─────────────────────────────────────────
+   CineVerse — booking.css  (Select Room)
+   Requires: test.css (shared base styles)
+───────────────────────────────────────── */
+
+/* ═══════════════════════════════════
+   BOOKING HERO
+═══════════════════════════════════ */
+.booking-hero {
+  background: var(--nav-bg);
+  padding: 36px 52px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.booking-hero .breadcrumb {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.booking-hero .breadcrumb a {
+  color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+.booking-hero .breadcrumb a:hover {
+  color: var(--accent);
+}
+.booking-hero .breadcrumb span {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.movie-summary {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.movie-summary img {
+  width: 70px;
+  height: 105px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.movie-summary-info h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  color: #fff;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+.movie-summary-info .tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag-pill {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.tag-pill.accent {
+  background: rgba(192, 57, 43, 0.2);
+  color: var(--accent);
+  border-color: rgba(192, 57, 43, 0.3);
+}
+
+/* ═══════════════════════════════════
+   STEPS BAR
+═══════════════════════════════════ */
+.steps-bar {
+  background: var(--bg-card2);
+  padding: 16px 52px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+.step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  border: 2px solid transparent;
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+.step.active .step-num {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.step.active {
+  color: var(--text);
+}
+.step.done .step-num {
+  background: rgba(192, 57, 43, 0.15);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.step-divider {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  margin: 0 16px;
+  max-width: 80px;
+  transition: background var(--transition);
+}
+.step-divider.done {
+  background: var(--accent);
+}
+
+/* ═══════════════════════════════════
+   BOOKING BODY
+═══════════════════════════════════ */
+.booking-body {
+  padding: 40px 52px 60px;
+}
+
+.section-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: var(--text);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  max-width: 200px;
+}
+
+/* ═══════════════════════════════════
+   DATE SELECTOR
+═══════════════════════════════════ */
+.date-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 40px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  /* hide scrollbar but keep functionality */
+  scrollbar-width: none;
+}
+.date-row::-webkit-scrollbar {
+  display: none;
+}
+
+.date-btn {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 2px solid var(--border);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+  min-width: 70px;
+}
+.date-btn .day-name {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+  transition: color var(--transition);
+}
+.date-btn .day-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  color: var(--text);
+  line-height: 1;
+  transition: color var(--transition);
+}
+.date-btn .month {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  transition: color var(--transition);
+}
+.date-btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.date-btn.active {
+  border-color: var(--accent);
+  background: rgba(192, 57, 43, 0.08);
+}
+.date-btn.active .day-num,
+.date-btn.active .day-name,
+.date-btn.active .month {
+  color: var(--accent);
+}
+
+/* ═══════════════════════════════════
+   ROOMS GRID
+═══════════════════════════════════ */
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+/* ── Room Card ── */
+.room-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 20px;
+  cursor: pointer;
+  transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+  text-decoration: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+/* accent top-bar on hover */
+.room-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+.room-card:hover::before {
+  transform: scaleX(1);
+}
+.room-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(192, 57, 43, 0.12);
+}
+.room-card.unavailable {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Room number */
+.room-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+/* Room type badge */
+.room-type {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+/* Info rows */
+.room-info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.room-info-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.room-info-item svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+/* Availability bar */
+.room-availability {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.avail-bar-wrap {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-right: 10px;
+  overflow: hidden;
+}
+.avail-bar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.avail-bar.high { background: #27ae60; }
+.avail-bar.mid  { background: var(--gold); }
+.avail-bar.low  { background: var(--accent); }
+
+.avail-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Showtime chips */
+.showtime-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+.showtime-chip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--bg-card2);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+.showtime-chip:hover {
+  background: rgba(192, 57, 43, 0.08);
+  color: var(--accent);
+  border-color: rgba(192, 57, 43, 0.25);
+}
+.showtime-chip.sold-out {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+.showtime-chip.sold-out:hover {
+  background: var(--bg-card2);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════ */
+@media (max-width: 1400px) {
+  .rooms-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (max-width: 1100px) {
+  .rooms-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 800px) {
+  .rooms-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .booking-body {
+    padding: 24px;
+  }
+  .steps-bar {
+    padding: 16px 24px;
+  }
+  .booking-hero {
+    padding: 24px;
+  }
+}
+@media (max-width: 480px) {
+  .rooms-grid {
+    grid-template-columns: 1fr;
+  }
+}

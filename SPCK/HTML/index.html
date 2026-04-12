@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CineVerse - Movie Booking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/SPCK/CSS/style.css" />
+  </head>
+  <body>
+    <!-- ═══ HEADER ═══ -->
+    <header>  
+      <a class="nav-brand" href="#">
+        <img
+          class="nav-logo"
+          src="https://img.icons8.com/fluency/96/cinema-.png"
+          alt="CineVerse Logo"
+        />
+        <span class="nav-title">Cine<span>Verse</span></span>
+      </a>
+
+      <div class="search-box">
+        <input type="text" placeholder="Search movies, genres, actors..." />
+        <button>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
+      </div>
+
+      <nav>
+        <a href="#" class="active">Home</a>
+        <a href="#" class="btn-logout">Log Out</a>
+      </nav>
+    </header>
+
+    <!-- ═══ SLIDESHOW ═══ -->
+    <section class="slideshow-wrapper">
+      <div class="slideshow-container">
+        <div class="mySlides active">
+          <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1600&q=80" alt="Slide 1" />
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <span class="slide-badge">Now Showing</span>
+            <h2>The Last Frontier</h2>
+            <p>An epic journey across the stars. Humanity's last hope rests on one crew, one mission, one chance.</p>
+            <button class="btn-book">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <polyline points="3,5 12,13 21,5" />
+              </svg>
+              Book Tickets
+            </button>
+          </div>
+        </div>
+
+        <div class="mySlides">
+          <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1600&q=80" alt="Slide 2" />
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <span class="slide-badge">Coming Soon</span>
+            <h2>Midnight Echo</h2>
+            <p>A psychological thriller that blurs the line between memory and reality.</p>
+            <button class="btn-book">Book Tickets</button>
+          </div>
+        </div>
+
+        <div class="mySlides">
+          <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?w=1600&q=80" alt="Slide 3" />
+          <div class="slide-overlay"></div>
+          <div class="slide-content">
+            <span class="slide-badge">Special Screening</span>
+            <h2>Crimson Horizon</h2>
+            <p>Award-winning drama that captivated millions. Now in IMAX for the first time.</p>
+            <button class="btn-book">Book Tickets</button>
+          </div>
+        </div>
+
+        <!-- Arrows -->
+        <button class="slide-arrow prev" onclick="changeSlide(-1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15,18 9,12 15,6" />
+          </svg>
+        </button>
+        <button class="slide-arrow next" onclick="changeSlide(1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9,18 15,12 9,6" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="dots-container">
+        <button class="dot active" onclick="goToSlide(0)"></button>
+        <button class="dot" onclick="goToSlide(1)"></button>
+        <button class="dot" onclick="goToSlide(2)"></button>
+      </div>
+    </section>
+
+    <!-- ═══ MOVIES SECTION ═══ -->
+    <section class="movies-section">
+      <div class="section-head">
+        <h2>Movies</h2>
+        <a href="#" class="see-all">View all →</a>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="tab active">Now Showing</button>
+        <button class="tab">Coming Soon</button>
+        <button class="tab">Top Rated</button>
+      </div>
+
+      <div class="movie-grid">
+
+        <!-- Card 1 — The Godfather -->
+        <div class="movie-card">
+          <div class="movie-poster">
+            <img src="https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg" alt="The Godfather" />
+            <div class="movie-rating">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+              9.2
+            </div>
+            <div class="movie-age">R</div>
+            <div class="movie-hover-overlay">
+              <div class="btn-play">
+                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" /></svg>
+              </div>
+            </div>
+          </div>
+          <div class="movie-info">
+            <div class="movie-genre">Crime · Drama</div>
+            <div class="movie-title">The Godfather</div>
+            <div class="movie-meta">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" /></svg>
+                175 min
+              </span>
+              <span>1972</span>
+            </div>
+            <button class="btn-booking">Book Now</button>
+          </div>
+        </div>
+
+        <!-- Card 2 — Interstellar -->
+        <div class="movie-card">
+          <div class="movie-poster">
+            <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" alt="Interstellar" />
+            <div class="movie-rating">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+              8.7
+            </div>
+            <div class="movie-age">PG-13</div>
+            <div class="movie-hover-overlay">
+              <div class="btn-play">
+                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" /></svg>
+              </div>
+            </div>
+          </div>
+          <div class="movie-info">
+            <div class="movie-genre">Sci-Fi · Adventure</div>
+            <div class="movie-title">Interstellar</div>
+            <div class="movie-meta">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" /></svg>
+                169 min
+              </span>
+              <span>2014</span>
+            </div>
+            <button class="btn-booking">Book Now</button>
+          </div>
+        </div>
+
+        <!-- Card 3 — The Dark Knight -->
+        <div class="movie-card">
+          <div class="movie-poster">
+            <img src="https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_.jpg" alt="The Dark Knight" />
+            <div class="movie-rating">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+              9.0
+            </div>
+            <div class="movie-age">PG-13</div>
+            <div class="movie-hover-overlay">
+              <div class="btn-play">
+                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" /></svg>
+              </div>
+            </div>
+          </div>
+          <div class="movie-info">
+            <div class="movie-genre">Action · Thriller</div>
+            <div class="movie-title">The Dark Knight</div>
+            <div class="movie-meta">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" /></svg>
+                152 min
+              </span>
+              <span>2008</span>
+            </div>
+            <button class="btn-booking">Book Now</button>
+          </div>
+        </div>
+
+        <!-- Card 4 — The Matrix -->
+        <div class="movie-card">
+          <div class="movie-poster">
+            <img src="https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg" alt="The Matrix" />
+            <div class="movie-rating">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+              8.7
+            </div>
+            <div class="movie-age">R</div>
+            <div class="movie-hover-overlay">
+              <div class="btn-play">
+                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" /></svg>
+              </div>
+            </div>
+          </div>
+          <div class="movie-info">
+            <div class="movie-genre">Sci-Fi · Action</div>
+            <div class="movie-title">The Matrix</div>
+            <div class="movie-meta">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" /></svg>
+                136 min
+              </span>
+              <span>1999</span>
+            </div>
+            <button class="btn-booking">Book Now</button>
+          </div>
+        </div>
+
+        <!-- Card 5 — The Shawshank Redemption -->
+        <div class="movie-card">
+          <div class="movie-poster">
+            <img src="https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg" alt="The Shawshank Redemption" />
+            <div class="movie-rating">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+              9.3
+            </div>
+            <div class="movie-age">R</div>
+            <div class="movie-hover-overlay">
+              <div class="btn-play">
+                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" /></svg>
+              </div>
+            </div>
+          </div>
+          <div class="movie-info">
+            <div class="movie-genre">Drama</div>
+            <div class="movie-title">The Shawshank Redemption</div>
+            <div class="movie-meta">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" /></svg>
+                142 min
+              </span>
+              <span>1994</span>
+            </div>
+            <button class="btn-booking">Book Now</button>
+          </div>
+        </div>
+
+        <!-- Card 6 — Pulp Fiction -->
+        <div class="movie-card">
+          <div class="movie-poster">
+            <img src="https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg" alt="Pulp Fiction" />
+            <div class="movie-rating">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+              8.9
+            </div>
+            <div class="movie-age">R</div>
+            <div class="movie-hover-overlay">
+              <div class="btn-play">
+                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" /></svg>
+              </div>
+            </div>
+          </div>
+          <div class="movie-info">
+            <div class="movie-genre">Crime · Thriller</div>
+            <div class="movie-title">Pulp Fiction</div>
+            <div class="movie-meta">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" /></svg>
+                154 min
+              </span>
+              <span>1994</span>
+            </div>
+            <button class="btn-booking">Book Now</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ═══ PROMO BANNER ═══ -->
+    <section class="promo-section">
+      <div class="promo-banner">
+        <div class="promo-text">
+          <h3>Get <span>20% OFF</span><br />Your First Booking</h3>
+          <p>
+            Sign up for CineVerse membership and unlock exclusive discounts,
+            early access to screenings, and premium seat upgrades.
+          </p>
+        </div>
+        <div class="promo-action">
+          <button class="btn-promo">🎟️ Claim Your Discount</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+      <p>© 2026 <span>CineVerse</span>. All Rights Reserved.</p>
+    </footer>
+
+    <script src="/SPCK/JS/index.js"></script>
+  </body>
+</html>

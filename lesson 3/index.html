@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>table</title>
+  </head>
+  <body>
+    <style>
+      .table_component {
+        overflow: auto;
+        width: 100%;
+      }
+
+      .table_component table {
+        border: 1px solid #dededf;
+        height: 100%;
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+        border-spacing: 1px;
+        text-align: left;
+      }
+
+      .table_component caption {
+        caption-side: top;
+        text-align: left;
+      }
+
+      .table_component th {
+        border: 1px solid #dededf;
+        background-color: #eceff1;
+        color: #000000;
+        padding: 5px;
+      }
+
+      .table_component td {
+        border: 1px solid #dededf;
+        background-color: #ffffff;
+        color: #000000;
+        padding: 5px;
+      }
+    </style>
+    <div class="table_component" role="region" tabindex="0">
+      <table>
+        <caption>
+          Table 1
+        </caption>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>Username</th>
+            <th>Fullname</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top: 8px">
+        Made with
+        <a href="https://www.htmltables.io/" target="_blank">HTML Tables</a>
+      </div>
+    </div>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+      } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyBpC_RSKp0qCtO2BOS1rUmjv12wyN3OpE0",
+        authDomain: "jsi13-c67f2.firebaseapp.com",
+        projectId: "jsi13-c67f2",
+        storageBucket: "jsi13-c67f2.firebasestorage.app",
+        messagingSenderId: "107804399992",
+        appId: "1:107804399992:web:8ff1623a53b05a67bcd08d",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      const db = getFirestore(app);
+
+      const eleBody = document.querySelector("tbody");
+      const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach((doc) => {
+        console.log(doc.data())
+
+        eleBody.innerHTML += `
+          <tr>
+            <td>${doc.data().username}</td>
+            <td>${doc.data().fullname}</td>
+            <td>${doc.data().address}</td>
+            <td>${doc.data().date}</td>
+          </tr>
+        `;
+      });
+    </script>
+  </body>
+</html>

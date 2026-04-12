@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TechSeek SignIn</title>
+    <link rel="stylesheet" href="../CSS/signin.css" />
+  </head>
+  <body>
+    <div class="container">
+      <img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqwltfx0WhUutPQWJj4WJwuEcL39uBvDGHHw&s"
+        alt="Logo"
+      />
+
+      <h2>Sign into your CineVerse account</h2>
+
+      <!-- IMPORTANT: onsubmit -->
+      <form onsubmit="login(event)">
+        <label>Email</label>
+        <input
+          id="email"
+          class="input-field"
+          type="email"
+          placeholder="Enter your Email..."
+          required
+        />
+
+        <label>Password</label>
+        <input
+          id="password"
+          class="input-field"
+          type="password"
+          placeholder="Enter your Password..."
+          required
+        />
+
+        <div class="checkbox">
+          <input type="checkbox" id="showPass" onclick="togglePassword()" />
+          <label for="showPass">Show Password</label>
+        </div>
+
+        <button class="btn" type="submit">Sign in</button>
+      </form>
+
+      <div class="signup">
+        Don’t have an Account? <a href="signup.html">Sign up</a>
+      </div>
+    </div>
+
+    <script src="../JS/signin.js"></script>
+  </body>
+</html>

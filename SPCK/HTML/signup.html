@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TechSeek Sign Up</title>
+    <link rel="stylesheet" href="../CSS/signup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <img
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqwltfx0WhUutPQWJj4WJwuEcL39uBvDGHHw&s"
+        alt="Logo"
+      />
+
+      <h2>Create your CineVerse account</h2>
+
+      <form onsubmit="return false;">
+        <label>Fullname</label>
+        <input
+          id="fullname"
+          type="text"
+          placeholder="Enter your Fullname..."
+          required
+        />
+
+        <label>Email</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="Enter your Email..."
+          required
+        />
+
+        <label>Password</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Enter your Password..."
+          required
+        />
+
+        <label>Confirm Password</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          placeholder="Confirm your Password..."
+          required
+        />
+
+        <div class="checkbox">
+          <input type="checkbox" id="showPass" onclick="togglePassword()" />
+          <label for="showPass">Show Passwords</label>
+        </div>
+
+        <button class="btn" type="button" onclick="register()">Sign up</button>
+      </form>
+
+      <div class="signup">
+        Already have an Account?
+        <a href="signin.html">Sign in</a>
+      </div>
+    </div>
+
+    <script src="/Spck/JS/signup.js"></script>
+  </body>
+</html>

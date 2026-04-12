@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CineVerse - Select Seats</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <!-- Shared styles -->
+    <link rel="stylesheet" href="/SPCK/CSS/style.css" />
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="/SPCK/CSS/seats.css" />
+  </head>
+  <body>
+
+    <!-- ═══ HEADER ═══ -->
+    <header>
+      <a class="nav-brand" href="index.html">
+        <img class="nav-logo" src="https://img.icons8.com/fluency/96/cinema-.png" alt="CineVerse Logo" />
+        <span class="nav-title">Cine<span>Verse</span></span>
+      </a>
+      <div class="search-box">
+        <input type="text" placeholder="Search movies, genres, actors..." />
+        <button>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
+      </div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="#" class="btn-logout">Log Out</a>
+      </nav>
+    </header>
+
+    <!-- ═══ MOVIE HERO ═══ -->
+    <div class="booking-hero">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span>›</span>
+        <a href="#">Movies</a>
+        <span>›</span>
+        <a href="booking.html">Select Room</a>
+        <span>›</span>
+        Select Seats
+      </div>
+      <div class="movie-summary">
+        <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" alt="Movie Poster" />
+        <div class="movie-summary-info">
+          <h1>Interstellar</h1>
+          <div class="tags">
+            <span class="tag-pill accent">PG-13</span>
+            <span class="tag-pill">Sci-Fi · Adventure</span>
+            <span class="tag-pill">169 min</span>
+            <span class="tag-pill" id="room-tag">Room —</span>
+            <span class="tag-pill">19:30</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STEPS BAR ═══ -->
+    <div class="steps-bar">
+      <div class="step done">
+        <div class="step-num">✓</div>
+        Select Room
+      </div>
+      <div class="step-divider done"></div>
+      <div class="step active">
+        <div class="step-num">2</div>
+        Select Seats
+      </div>
+      <div class="step-divider"></div>
+      <div class="step">
+        <div class="step-num">3</div>
+        Confirm &amp; Pay
+      </div>
+    </div>
+
+    <!-- ═══ MAIN LAYOUT ═══ -->
+    <div class="seat-page-layout">
+
+      <!-- Cinema area -->
+      <div class="cinema-area">
+        <div class="room-badge" id="roomBadge">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          Room 1 · Standard
+        </div>
+
+        <!-- Screen -->
+        <div class="screen-wrap">
+          <div class="screen"></div>
+          <div class="screen-label">Screen</div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-dot available"></div>
+            Available
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot selected"></div>
+            Selected
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot taken"></div>
+            Taken
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot vip"></div>
+            VIP
+          </div>
+        </div>
+
+        <!-- Seat grid built by JS -->
+        <div class="seat-grid" id="seatGrid"></div>
+      </div>
+
+      <!-- Summary panel -->
+      <div class="summary-panel">
+        <div class="panel-title">Your Booking</div>
+
+        <div class="summary-row">
+          <span class="label">Movie</span>
+          <span class="value">Interstellar</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">Room</span>
+          <span class="value" id="summaryRoom">Room 1</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">Date</span>
+          <span class="value">Today</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">Showtime</span>
+          <span class="value">19:30</span>
+        </div>
+        <div class="summary-row">
+          <span class="label">Seats</span>
+          <div class="value">
+            <div class="selected-seats-display" id="selectedDisplay">
+              <span style="color:var(--text-muted);font-size:12px;font-weight:400;">None selected</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="price-total">
+          <span class="total-label">Total</span>
+          <span class="total-amount" id="totalPrice">$0.00</span>
+        </div>
+
+        <button class="btn-confirm" id="confirmBtn" disabled>Confirm Seats</button>
+        <a href="booking.html" class="btn-back">← Change Room</a>
+      </div>
+
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+      <p>© 2026 <span>CineVerse</span>. All Rights Reserved.</p>
+    </footer>
+
+    <script src="/SPCK/JS/test.js"></script>
+    <script src="../JS/seats.js"></script>
+  </body>
+</html>

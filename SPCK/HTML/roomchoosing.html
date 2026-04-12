@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CineVerse - Select Room</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <!-- Shared styles -->
+    <link rel="stylesheet" href="/SPCK/CSS/style.css" />
+    <!-- Page-specific styles -->
+    <link rel="stylesheet" href="/SPCK/CSS/booking.css" />
+  </head>
+  <body>
+
+    <!-- ═══ HEADER ═══ -->
+    <header>
+      <a class="nav-brand" href="index.html">
+        <img class="nav-logo" src="https://img.icons8.com/fluency/96/cinema-.png" alt="CineVerse Logo" />
+        <span class="nav-title">Cine<span>Verse</span></span>
+      </a>
+      <div class="search-box">
+        <input type="text" placeholder="Search movies, genres, actors..." />
+        <button>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
+      </div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="#" class="btn-logout">Log Out</a>
+      </nav>
+    </header>
+
+    <!-- ═══ MOVIE SUMMARY HERO ═══ -->
+    <div class="booking-hero">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span>›</span>
+        <a href="#">Movies</a>
+        <span>›</span>
+        Book Tickets
+      </div>
+      <div class="movie-summary">
+        <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" alt="Movie Poster" id="hero-poster" />
+        <div class="movie-summary-info">
+          <h1 id="hero-title">Interstellar</h1>
+          <div class="tags">
+            <span class="tag-pill accent">PG-13</span>
+            <span class="tag-pill">Sci-Fi · Adventure</span>
+            <span class="tag-pill">169 min</span>
+            <span class="tag-pill">2014</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ STEPS BAR ═══ -->
+    <div class="steps-bar">
+      <div class="step active">
+        <div class="step-num">1</div>
+        Select Room
+      </div>
+      <div class="step-divider"></div>
+      <div class="step">
+        <div class="step-num">2</div>
+        Select Seats
+      </div>
+      <div class="step-divider"></div>
+      <div class="step">
+        <div class="step-num">3</div>
+        Confirm &amp; Pay
+      </div>
+    </div>
+
+    <!-- ═══ BOOKING BODY ═══ -->
+    <div class="booking-body">
+
+      <!-- Date picker -->
+      <div class="section-label">Choose Date</div>
+      <div class="date-row" id="dateRow"></div>
+
+      <!-- Room picker -->
+      <div class="section-label">Choose Room</div>
+      <div class="rooms-grid">
+
+        <!-- Room 1 -->
+        <a class="room-card" href="seats.html?room=1">
+          <div class="room-number">01</div>
+          <div class="room-type">Standard</div>
+          <div class="room-info-row">
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              56 seats total
+            </div>
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Standard Screen
+            </div>
+          </div>
+          <div class="room-availability">
+            <div class="avail-bar-wrap"><div class="avail-bar high" style="width:80%"></div></div>
+            <span class="avail-text">45 left</span>
+          </div>
+          <div class="showtime-chips">
+            <span class="showtime-chip">10:00</span>
+            <span class="showtime-chip">13:30</span>
+            <span class="showtime-chip sold-out">16:00</span>
+            <span class="showtime-chip">19:30</span>
+          </div>
+        </a>
+
+        <!-- Room 2 -->
+        <a class="room-card" href="seats.html?room=2">
+          <div class="room-number">02</div>
+          <div class="room-type">IMAX</div>
+          <div class="room-info-row">
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              120 seats total
+            </div>
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              IMAX Screen
+            </div>
+          </div>
+          <div class="room-availability">
+            <div class="avail-bar-wrap"><div class="avail-bar mid" style="width:40%"></div></div>
+            <span class="avail-text">48 left</span>
+          </div>
+          <div class="showtime-chips">
+            <span class="showtime-chip sold-out">09:00</span>
+            <span class="showtime-chip">12:00</span>
+            <span class="showtime-chip">15:30</span>
+            <span class="showtime-chip">20:00</span>
+          </div>
+        </a>
+
+        <!-- Room 3 -->
+        <a class="room-card" href="seats.html?room=3">
+          <div class="room-number">03</div>
+          <div class="room-type">4DX</div>
+          <div class="room-info-row">
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              64 seats total
+            </div>
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Motion Seats
+            </div>
+          </div>
+          <div class="room-availability">
+            <div class="avail-bar-wrap"><div class="avail-bar low" style="width:15%"></div></div>
+            <span class="avail-text">10 left</span>
+          </div>
+          <div class="showtime-chips">
+            <span class="showtime-chip sold-out">11:00</span>
+            <span class="showtime-chip sold-out">14:00</span>
+            <span class="showtime-chip">17:30</span>
+            <span class="showtime-chip">21:00</span>
+          </div>
+        </a>
+
+        <!-- Room 4 -->
+        <a class="room-card" href="seats.html?room=4">
+          <div class="room-number">04</div>
+          <div class="room-type">Standard</div>
+          <div class="room-info-row">
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              56 seats total
+            </div>
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Standard Screen
+            </div>
+          </div>
+          <div class="room-availability">
+            <div class="avail-bar-wrap"><div class="avail-bar high" style="width:90%"></div></div>
+            <span class="avail-text">50 left</span>
+          </div>
+          <div class="showtime-chips">
+            <span class="showtime-chip">10:30</span>
+            <span class="showtime-chip">14:30</span>
+            <span class="showtime-chip">18:00</span>
+            <span class="showtime-chip">21:30</span>
+          </div>
+        </a>
+
+        <!-- Room 5 -->
+        <a class="room-card" href="seats.html?room=5">
+          <div class="room-number">05</div>
+          <div class="room-type">VIP</div>
+          <div class="room-info-row">
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              32 seats total
+            </div>
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Premium Screen
+            </div>
+          </div>
+          <div class="room-availability">
+            <div class="avail-bar-wrap"><div class="avail-bar mid" style="width:50%"></div></div>
+            <span class="avail-text">16 left</span>
+          </div>
+          <div class="showtime-chips">
+            <span class="showtime-chip">13:00</span>
+            <span class="showtime-chip sold-out">17:00</span>
+            <span class="showtime-chip">20:30</span>
+          </div>
+        </a>
+
+        <!-- Room 6 -->
+        <a class="room-card" href="seats.html?room=6">
+          <div class="room-number">06</div>
+          <div class="room-type">Standard</div>
+          <div class="room-info-row">
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              56 seats total
+            </div>
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Standard Screen
+            </div>
+          </div>
+          <div class="room-availability">
+            <div class="avail-bar-wrap"><div class="avail-bar high" style="width:70%"></div></div>
+            <span class="avail-text">39 left</span>
+          </div>
+          <div class="showtime-chips">
+            <span class="showtime-chip">09:30</span>
+            <span class="showtime-chip">12:30</span>
+            <span class="showtime-chip">16:30</span>
+            <span class="showtime-chip">19:00</span>
+          </div>
+        </a>
+
+        <!-- Room 7 -->
+        <a class="room-card" href="seats.html?room=7">
+          <div class="room-number">07</div>
+          <div class="room-type">Dolby Atmos</div>
+          <div class="room-info-row">
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              80 seats total
+            </div>
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Curved Screen
+            </div>
+          </div>
+          <div class="room-availability">
+            <div class="avail-bar-wrap"><div class="avail-bar mid" style="width:35%"></div></div>
+            <span class="avail-text">28 left</span>
+          </div>
+          <div class="showtime-chips">
+            <span class="showtime-chip sold-out">10:00</span>
+            <span class="showtime-chip">14:00</span>
+            <span class="showtime-chip">18:30</span>
+            <span class="showtime-chip">22:00</span>
+          </div>
+        </a>
+
+        <!-- Room 8 -->
+        <a class="room-card" href="seats.html?room=8">
+          <div class="room-number">08</div>
+          <div class="room-type">Standard</div>
+          <div class="room-info-row">
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              56 seats total
+            </div>
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Standard Screen
+            </div>
+          </div>
+          <div class="room-availability">
+            <div class="avail-bar-wrap"><div class="avail-bar low" style="width:10%"></div></div>
+            <span class="avail-text">6 left</span>
+          </div>
+          <div class="showtime-chips">
+            <span class="showtime-chip sold-out">11:30</span>
+            <span class="showtime-chip sold-out">15:00</span>
+            <span class="showtime-chip">19:00</span>
+            <span class="showtime-chip sold-out">22:30</span>
+          </div>
+        </a>
+
+        <!-- Room 9 -->
+        <a class="room-card" href="seats.html?room=9">
+          <div class="room-number">09</div>
+          <div class="room-type">Standard</div>
+          <div class="room-info-row">
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              56 seats total
+            </div>
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Standard Screen
+            </div>
+          </div>
+          <div class="room-availability">
+            <div class="avail-bar-wrap"><div class="avail-bar high" style="width:85%"></div></div>
+            <span class="avail-text">48 left</span>
+          </div>
+          <div class="showtime-chips">
+            <span class="showtime-chip">09:00</span>
+            <span class="showtime-chip">13:00</span>
+            <span class="showtime-chip">17:00</span>
+            <span class="showtime-chip">21:00</span>
+          </div>
+        </a>
+
+        <!-- Room 10 -->
+        <a class="room-card" href="seats.html?room=10">
+          <div class="room-number">10</div>
+          <div class="room-type">VIP Lounge</div>
+          <div class="room-info-row">
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              24 seats total
+            </div>
+            <div class="room-info-item">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Premium Screen
+            </div>
+          </div>
+          <div class="room-availability">
+            <div class="avail-bar-wrap"><div class="avail-bar high" style="width:60%"></div></div>
+            <span class="avail-text">14 left</span>
+          </div>
+          <div class="showtime-chips">
+            <span class="showtime-chip">12:00</span>
+            <span class="showtime-chip">16:00</span>
+            <span class="showtime-chip">20:00</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+      <p>© 2026 <span>CineVerse</span>. All Rights Reserved.</p>
+    </footer>
+
+    <script src="/SPCK/JS/"></script>
+    <script src="../JS/boo"></script>
+  </body>
+</html>
