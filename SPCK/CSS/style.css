@@ -1,6 +1,5 @@
 /* ─────────────────────────────────────────
    CineVerse — style.css
-   Place this file in your /css/ folder
 ───────────────────────────────────────── */
 
 /* ─── CSS Variables (Light Mode) ─── */
@@ -50,9 +49,7 @@
   margin: 0;
   padding: 0;
 }
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 body {
   font-family: 'DM Sans', sans-serif;
   background: var(--bg);
@@ -76,7 +73,6 @@ header {
   z-index: 100;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
 }
-
 .nav-brand {
   display: flex;
   align-items: center;
@@ -98,9 +94,7 @@ header {
   letter-spacing: 2px;
   line-height: 1;
 }
-.nav-title span {
-  color: var(--accent);
-}
+.nav-title span { color: var(--accent); }
 
 /* Search Box */
 .search-box {
@@ -128,9 +122,7 @@ header {
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
 }
-.search-box input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
-}
+.search-box input::placeholder { color: rgba(255, 255, 255, 0.4); }
 .search-box button {
   background: var(--accent);
   border: none;
@@ -145,20 +137,11 @@ header {
   color: #fff;
   flex-shrink: 0;
 }
-.search-box button:hover {
-  background: var(--accent-dark);
-}
-.search-box button svg {
-  width: 16px;
-  height: 16px;
-}
+.search-box button:hover { background: var(--accent-dark); }
+.search-box button svg { width: 16px; height: 16px; }
 
 /* Nav Links */
-nav {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+nav { display: flex; align-items: center; gap: 8px; }
 nav a {
   text-decoration: none;
   color: rgba(255, 255, 255, 0.75);
@@ -168,13 +151,8 @@ nav a {
   border-radius: 8px;
   transition: var(--transition);
 }
-nav a:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
-}
-nav a.active {
-  color: #fff;
-}
+nav a:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+nav a.active { color: #fff; }
 .btn-logout {
   background: rgba(192, 57, 43, 0.18);
   color: var(--accent) !important;
@@ -189,9 +167,7 @@ nav a.active {
 /* ═══════════════════════════════════
    SLIDESHOW
 ═══════════════════════════════════ */
-.slideshow-wrapper {
-  position: relative;
-}
+.slideshow-wrapper { position: relative; }
 .slideshow-container {
   position: relative;
   width: 100%;
@@ -199,21 +175,9 @@ nav a.active {
   overflow: hidden;
   background: #000;
 }
-.mySlides {
-  display: none;
-  height: 100%;
-  position: relative;
-}
-.mySlides.active {
-  display: block;
-  animation: fadeSlide 0.5s ease;
-}
-.mySlides img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.7;
-}
+.mySlides { display: none; height: 100%; position: relative; }
+.mySlides.active { display: block; animation: fadeSlide 0.5s ease; }
+.mySlides img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
 .slide-overlay {
   position: absolute;
   inset: 0;
@@ -269,10 +233,7 @@ nav a.active {
   border: none;
   cursor: pointer;
 }
-.btn-book:hover {
-  background: var(--accent-dark);
-  transform: translateY(-2px);
-}
+.btn-book:hover { background: var(--accent-dark); transform: translateY(-2px); }
 
 /* Slide Arrows */
 .slide-arrow {
@@ -293,10 +254,7 @@ nav a.active {
   transition: var(--transition);
   backdrop-filter: blur(6px);
 }
-.slide-arrow:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-}
+.slide-arrow:hover { background: var(--accent); border-color: var(--accent); }
 .slide-arrow.prev { left: 20px; }
 .slide-arrow.next { right: 20px; }
 .slide-arrow svg  { width: 18px; height: 18px; }
@@ -319,11 +277,7 @@ nav a.active {
   transition: var(--transition);
   border: none;
 }
-.dot.active,
-.dot:hover {
-  background: var(--accent);
-  transform: scale(1.3);
-}
+.dot.active, .dot:hover { background: var(--accent); transform: scale(1.3); }
 
 /* ═══════════════════════════════════
    SECTION HEADER
@@ -361,9 +315,7 @@ nav a.active {
   letter-spacing: 0.5px;
   transition: var(--transition);
 }
-.see-all:hover {
-  color: var(--accent-dark);
-}
+.see-all:hover { color: var(--accent-dark); }
 
 /* ═══════════════════════════════════
    FILTER TABS
@@ -394,20 +346,54 @@ nav a.active {
   color: #fff;
   box-shadow: 0 2px 8px rgba(192, 57, 43, 0.3);
 }
-.tab:hover:not(.active) {
-  color: var(--text);
-}
+.tab:hover:not(.active) { color: var(--text); }
 
 /* ═══════════════════════════════════
-   MOVIE GRID & CARDS
+   CAROUSEL WRAPPER
 ═══════════════════════════════════ */
-.movies-section {
-  padding: 52px 52px 20px;
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
+
+.carousel-arrow {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-card);
+}
+.carousel-arrow:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: scale(1.08);
+}
+.carousel-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+.carousel-arrow svg { width: 20px; height: 20px; }
+
+/* ═══════════════════════════════════
+   MOVIE GRID — 3 columns
+═══════════════════════════════════ */
 .movie-grid {
+  flex: 1;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+  overflow: hidden;
 }
 
 .movie-card {
@@ -416,8 +402,12 @@ nav a.active {
   overflow: hidden;
   box-shadow: var(--shadow-card);
   border: 1px solid var(--border);
-  transition: transform var(--transition), box-shadow var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
   cursor: pointer;
+}
+/* Hidden cards */
+.movie-card.hidden {
+  display: none;
 }
 .movie-card:hover {
   transform: translateY(-6px);
@@ -435,9 +425,7 @@ nav a.active {
   object-fit: cover;
   transition: transform 0.4s ease;
 }
-.movie-card:hover .movie-poster img {
-  transform: scale(1.05);
-}
+.movie-card:hover .movie-poster img { transform: scale(1.05); }
 
 .movie-rating {
   position: absolute;
@@ -454,11 +442,7 @@ nav a.active {
   gap: 3px;
   backdrop-filter: blur(4px);
 }
-.movie-rating svg {
-  width: 11px;
-  height: 11px;
-  fill: var(--gold);
-}
+.movie-rating svg { width: 11px; height: 11px; fill: var(--gold); }
 
 .movie-age {
   position: absolute;
@@ -482,9 +466,8 @@ nav a.active {
   opacity: 0;
   transition: opacity var(--transition);
 }
-.movie-card:hover .movie-hover-overlay {
-  opacity: 1;
-}
+.movie-card:hover .movie-hover-overlay { opacity: 1; }
+
 .btn-play {
   width: 52px;
   height: 52px;
@@ -496,19 +479,10 @@ nav a.active {
   border: 3px solid rgba(255, 255, 255, 0.3);
   transition: var(--transition);
 }
-.btn-play:hover {
-  transform: scale(1.1);
-}
-.btn-play svg {
-  width: 20px;
-  height: 20px;
-  fill: #fff;
-  margin-left: 3px;
-}
+.btn-play:hover { transform: scale(1.1); }
+.btn-play svg { width: 20px; height: 20px; fill: #fff; margin-left: 3px; }
 
-.movie-info {
-  padding: 14px 16px 16px;
-}
+.movie-info { padding: 14px 16px 16px; }
 .movie-genre {
   font-size: 11px;
   font-weight: 600;
@@ -535,15 +509,8 @@ nav a.active {
   gap: 10px;
   margin-bottom: 14px;
 }
-.movie-meta span {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.movie-meta svg {
-  width: 12px;
-  height: 12px;
-}
+.movie-meta span { display: flex; align-items: center; gap: 4px; }
+.movie-meta svg { width: 12px; height: 12px; }
 
 .btn-booking {
   width: 100%;
@@ -559,16 +526,34 @@ nav a.active {
   transition: var(--transition);
   letter-spacing: 0.3px;
 }
-.btn-booking:hover {
-  background: var(--accent-dark);
+.btn-booking:hover { background: var(--accent-dark); }
+
+/* Carousel page dots */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+.carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 0;
+}
+.carousel-dot.active {
+  background: var(--accent);
+  transform: scale(1.3);
 }
 
 /* ═══════════════════════════════════
    PROMO BANNER
 ═══════════════════════════════════ */
-.promo-section {
-  padding: 0 52px 52px;
-}
+.promo-section { padding: 0 52px 52px; }
 .promo-banner {
   background: linear-gradient(135deg, #1a0a08 0%, #3d1414 50%, #1a0a08 100%);
   border-radius: 16px;
@@ -582,20 +567,16 @@ nav a.active {
 .promo-banner::before {
   content: '';
   position: absolute;
-  top: -60px;
-  right: -60px;
-  width: 280px;
-  height: 280px;
+  top: -60px; right: -60px;
+  width: 280px; height: 280px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(192, 57, 43, 0.25) 0%, transparent 70%);
 }
 .promo-banner::after {
   content: '';
   position: absolute;
-  bottom: -80px;
-  left: 30%;
-  width: 200px;
-  height: 200px;
+  bottom: -80px; left: 30%;
+  width: 200px; height: 200px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(212, 160, 23, 0.1) 0%, transparent 70%);
 }
@@ -607,19 +588,14 @@ nav a.active {
   line-height: 1.1;
   margin-bottom: 10px;
 }
-.promo-text h3 span {
-  color: var(--gold);
-}
+.promo-text h3 span { color: var(--gold); }
 .promo-text p {
   color: rgba(255, 255, 255, 0.65);
   font-size: 15px;
   max-width: 360px;
   line-height: 1.5;
 }
-.promo-action {
-  position: relative;
-  z-index: 1;
-}
+.promo-action { position: relative; z-index: 1; }
 .btn-promo {
   display: inline-flex;
   align-items: center;
@@ -636,10 +612,7 @@ nav a.active {
   cursor: pointer;
   white-space: nowrap;
 }
-.btn-promo:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(212, 160, 23, 0.35);
-}
+.btn-promo:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(212, 160, 23, 0.35); }
 
 /* ═══════════════════════════════════
    FOOTER
@@ -652,73 +625,39 @@ footer {
   font-size: 13px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
-footer span {
-  color: var(--accent);
-}
+footer span { color: var(--accent); }
+
+/* ═══════════════════════════════════
+   MOVIES SECTION
+═══════════════════════════════════ */
+.movies-section { padding: 52px 52px 20px; }
 
 /* ═══════════════════════════════════
    ANIMATIONS
 ═══════════════════════════════════ */
 @keyframes fadeSlide {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 /* ═══════════════════════════════════
    RESPONSIVE
 ═══════════════════════════════════ */
-@media (max-width: 1100px) {
-  .movie-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+@media (max-width: 900px) {
+  .movie-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 800px) {
-  header {
-    padding: 0 20px;
-  }
-  .search-box {
-    width: 220px;
-  }
-  .movie-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .movies-section,
-  .promo-section {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-  .slide-content {
-    left: 30px;
-  }
-  .slide-content h2 {
-    font-size: 36px;
-  }
-  .promo-banner {
-    flex-direction: column;
-    gap: 28px;
-    padding: 32px;
-  }
+  header { padding: 0 20px; }
+  .search-box { width: 220px; }
+  .movies-section, .promo-section { padding-left: 24px; padding-right: 24px; }
+  .slide-content { left: 30px; }
+  .slide-content h2 { font-size: 36px; }
+  .promo-banner { flex-direction: column; gap: 28px; padding: 32px; }
 }
-@media (max-width: 520px) {
-  .nav-title {
-    font-size: 22px;
-  }
-  .search-box {
-    display: none;
-  }
-  .movie-grid {
-    grid-template-columns: 1fr;
-  }
-  .slideshow-container {
-    height: 320px;
-  }
-  .slide-content h2 {
-    font-size: 28px;
-  }
+@media (max-width: 600px) {
+  .movie-grid { grid-template-columns: 1fr; }
+  .nav-title { font-size: 22px; }
+  .search-box { display: none; }
+  .slideshow-container { height: 320px; }
+  .slide-content h2 { font-size: 28px; }
 }
