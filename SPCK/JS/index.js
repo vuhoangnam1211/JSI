@@ -1,25 +1,59 @@
-// ─────────────────────────────────────────
-//   CineVerse — movies.js
-//   Place this file in your /SPCK/JS/ folder
-// ─────────────────────────────────────────
-
 import { db } from "./firebase.js";
 import {
   collection,
   getDocs,
-} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
+// ─────────────────────────────────────────
+//   SLIDESHOW
+// ─────────────────────────────────────────
+let slideIndex = 0;
+const slides = document.querySelectorAll(".mySlides");
+const dots = document.querySelectorAll(".dot");
+
+function showSlide(index) {
+  if (index >= slides.length) slideIndex = 0;
+  if (index < 0) slideIndex = slides.length - 1;
+
+  slides.forEach((s) => s.classList.remove("active"));
+  dots.forEach((d) => d.classList.remove("active"));
+
+  slides[slideIndex].classList.add("active");
+  dots[slideIndex].classList.add("active");
+}
+
+function changeSlide(n) {
+  slideIndex += n;
+  showSlide(slideIndex);
+}
+
+function goToSlide(n) {
+  slideIndex = n;
+  showSlide(slideIndex);
+}
+
+// Expose to window so inline onclick attributes work
+window.changeSlide = changeSlide;
+window.goToSlide = goToSlide;
+
+// Auto-advance every 5 seconds
+setInterval(() => changeSlide(1), 5000);
+
+// Show first slide on load
+showSlide(slideIndex);
+
+// ─────────────────────────────────────────
+//   MOVIES
+// ─────────────────────────────────────────
 async function loadMovies() {
   const grid = document.getElementById("movieGrid");
 
-  // Show loading message
   grid.innerHTML =
     '<p style="color:var(--text-muted);padding:20px;">Loading movies...</p>';
 
   try {
     const snapshot = await getDocs(collection(db, "movies"));
 
-    // Clear loading message
     grid.innerHTML = "";
 
     snapshot.forEach((doc) => {
@@ -56,7 +90,6 @@ async function loadMovies() {
       `;
     });
 
-    // Run carousel AFTER cards are loaded
     initCarousel();
   } catch (error) {
     grid.innerHTML =
@@ -65,6 +98,9 @@ async function loadMovies() {
   }
 }
 
+// ─────────────────────────────────────────
+//   CAROUSEL
+// ─────────────────────────────────────────
 function initCarousel() {
   const CARDS_PER_PAGE = 3;
   const cards = Array.from(document.querySelectorAll(".movie-card"));
