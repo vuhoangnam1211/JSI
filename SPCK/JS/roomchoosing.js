@@ -13,7 +13,7 @@ onAuthStateChanged(auth, (user) => {
   const nav = document.querySelector("nav");
   if (user) {
     nav.innerHTML = `
-      <a href="index.html">Home</a>
+      <a href="main.html">Home</a>
       <a href="#" class="btn-logout" id="logoutBtn">Log Out</a>
     `;
     document.getElementById("logoutBtn").addEventListener("click", async () => {
@@ -22,7 +22,7 @@ onAuthStateChanged(auth, (user) => {
     });
   } else {
     nav.innerHTML = `
-      <a href="index.html">Home</a>
+      <a href="main.html">Home</a>
       <a href="/SPCK/HTML/signin.html" class="btn-logout">Sign In</a>
       <a href="/SPCK/HTML/signup.html" class="btn-logout">Sign Up</a>
     `;

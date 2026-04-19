@@ -86,7 +86,7 @@ async function loginWithGoogle() {
     await signInWithPopup(auth, provider);
     // Google accounts don't need a separate sign up step —
     // Firebase creates the account automatically on first sign in
-    window.location.href = "index.html";
+    window.location.href = "main.html";
   } catch (error) {
     btn.innerHTML = `<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" /> Continue with Google`;
     btn.disabled = false;

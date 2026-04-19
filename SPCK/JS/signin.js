@@ -27,7 +27,7 @@ async function login(event) {
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
-    window.location.href = "index.html";
+    window.location.href = "main.html";
   } catch (error) {
     btn.textContent = "Sign in";
     btn.disabled = false;
@@ -60,7 +60,7 @@ async function loginWithGoogle() {
 
   try {
     await signInWithPopup(auth, provider);
-    window.location.href = "index.html";
+    window.location.href = "main.html";
   } catch (error) {
     btn.innerHTML = `<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" /> Continue with Google`;
     btn.disabled = false;
