@@ -53,29 +53,34 @@ import {
     "H4",
   ]);
 
+  /* ── Read ALL data from URL ── */
+  const params = new URLSearchParams(window.location.search);
+  const title = params.get("title") || "Unknown Movie";
+  const poster = params.get("poster") || "";
+  const genre = params.get("genre") || "";
+  const age = params.get("age") || "";
+  const duration = params.get("duration") || "";
+  const year = params.get("year") || "";
+  const roomNum = params.get("room") || "1";
+  const time = params.get("time") || "—";
+  const date = params.get("date") || "Today";
+  const roomType = ROOM_TYPES[roomNum] || "Standard";
+
   /* ── State ── */
   let selectedSeats = new Set();
 
   /* ── DOM references ── */
   const seatGrid = document.getElementById("seatGrid");
   const roomBadge = document.getElementById("roomBadge");
-  const summaryRoom = document.getElementById("summaryRoom");
-  const roomTag = document.getElementById("room-tag");
   const selectedDisplay = document.getElementById("selectedDisplay");
   const totalPriceEl = document.getElementById("totalPrice");
   const confirmBtn = document.getElementById("confirmBtn");
-
-  /* ── Read room from URL ── */
-  const params = new URLSearchParams(window.location.search);
-  const roomNum = params.get("room") || "1";
-  const roomType = ROOM_TYPES[roomNum] || "Standard";
 
   /* ── Auth guard + Nav bar ── */
   onAuthStateChanged(auth, (user) => {
     const nav = document.querySelector("nav");
 
     if (user) {
-      // Logged in — show Log Out
       nav.innerHTML = `
         <a href="index.html">Home</a>
         <a href="#" class="btn-logout" id="logoutBtn">Log Out</a>
@@ -87,19 +92,16 @@ import {
           window.location.href = "/SPCK/HTML/signin.html";
         });
 
-      // Allow seat selection
-      initRoomLabels();
+      initPage();
       buildSeatGrid();
       if (confirmBtn) confirmBtn.addEventListener("click", handleConfirm);
     } else {
-      // Not logged in — show Sign In / Sign Up
       nav.innerHTML = `
         <a href="index.html">Home</a>
         <a href="/SPCK/HTML/signin.html" class="btn-logout">Sign In</a>
         <a href="/SPCK/HTML/signup.html" class="btn-logout">Sign Up</a>
       `;
 
-      // Block seat grid
       if (seatGrid) {
         seatGrid.innerHTML = `
           <div style="text-align:center; padding: 40px 20px;">
@@ -114,23 +116,48 @@ import {
         confirmBtn.disabled = true;
         confirmBtn.textContent = "Sign in to confirm";
       }
+
+      // Still populate the hero so it doesn't look blank
+      initPage();
     }
   });
 
-  /* ── Initialise room labels ── */
-  function initRoomLabels() {
-    const screenIcon = `
-      <svg width="14" height="14" fill="none" stroke="currentColor"
-           stroke-width="2" viewBox="0 0 24 24">
-        <rect x="2" y="3" width="20" height="14" rx="2"/>
-        <line x1="8" y1="21" x2="16" y2="21"/>
-        <line x1="12" y1="17" x2="12" y2="21"/>
-      </svg>`;
+  /* ── Populate hero + summary with URL data ── */
+  function initPage() {
+    // Hero poster & title
+    const heroPoster = document.getElementById("hero-poster");
+    const heroTitle = document.getElementById("hero-title");
+    const heroTags = document.getElementById("hero-tags");
 
+    if (heroPoster) {
+      heroPoster.src = poster;
+      heroPoster.alt = title;
+    }
+    if (heroTitle) heroTitle.textContent = title;
+    if (heroTags)
+      heroTags.innerHTML = `
+      <span class="tag-pill accent">${age}</span>
+      <span class="tag-pill">${genre}</span>
+      <span class="tag-pill">${duration} min</span>
+      <span class="tag-pill" id="room-tag">Room ${roomNum}</span>
+      <span class="tag-pill">${time}</span>
+    `;
+
+    // Room badge
+    const screenIcon = `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`;
     if (roomBadge)
       roomBadge.innerHTML = `${screenIcon} Room ${roomNum} · ${roomType}`;
-    if (summaryRoom) summaryRoom.textContent = `Room ${roomNum}`;
-    if (roomTag) roomTag.textContent = `Room ${roomNum}`;
+
+    // Summary panel
+    const summaryMovie = document.getElementById("summaryMovie");
+    const summaryRoom = document.getElementById("summaryRoom");
+    const summaryDate = document.getElementById("summaryDate");
+    const summaryTime = document.getElementById("summaryTime");
+
+    if (summaryMovie) summaryMovie.textContent = title;
+    if (summaryRoom) summaryRoom.textContent = `Room ${roomNum} · ${roomType}`;
+    if (summaryDate) summaryDate.textContent = date;
+    if (summaryTime) summaryTime.textContent = time;
   }
 
   /* ── Build seat grid ── */
@@ -140,7 +167,6 @@ import {
     // Column number header
     const headerRow = document.createElement("div");
     headerRow.className = "seat-row";
-
     const emptyLabel = document.createElement("div");
     emptyLabel.className = "row-label";
     headerRow.appendChild(emptyLabel);
@@ -155,7 +181,6 @@ import {
     }
     seatGrid.appendChild(headerRow);
 
-    // Seat rows
     ROWS.forEach((row) => {
       const rowEl = document.createElement("div");
       rowEl.className = "seat-row";
@@ -202,7 +227,7 @@ import {
     return gap;
   }
 
-  /* ── Toggle seat selection ── */
+  /* ── Toggle seat ── */
   function toggleSeat(el, id, isVip) {
     if (selectedSeats.has(id)) {
       selectedSeats.delete(id);
@@ -214,7 +239,7 @@ import {
     updateSummary();
   }
 
-  /* ── Update summary panel ── */
+  /* ── Update summary ── */
   function updateSummary() {
     if (selectedSeats.size === 0) {
       selectedDisplay.innerHTML =
@@ -243,7 +268,7 @@ import {
   function handleConfirm() {
     const seats = [...selectedSeats].sort().join(", ");
     alert(
-      `Booking confirmed!\n\nMovie: Interstellar\nRoom: ${roomNum}\nSeats: ${seats}\n\nThank you!`,
+      `Booking confirmed!\n\nMovie: ${title}\nRoom: ${roomNum} · ${roomType}\nDate: ${date}\nShowtime: ${time}\nSeats: ${seats}\nTotal: $${[...selectedSeats].reduce((t, id) => t + (VIP_ROWS.includes(id[0]) ? VIP_PRICE : TICKET_PRICE), 0).toFixed(2)}\n\nThank you!`,
     );
   }
 })();

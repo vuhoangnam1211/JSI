@@ -42,10 +42,8 @@ const dots = document.querySelectorAll(".dot");
 function showSlide(index) {
   if (index >= slides.length) slideIndex = 0;
   if (index < 0) slideIndex = slides.length - 1;
-
   slides.forEach((s) => s.classList.remove("active"));
   dots.forEach((d) => d.classList.remove("active"));
-
   slides[slideIndex].classList.add("active");
   dots[slideIndex].classList.add("active");
 }
@@ -54,7 +52,6 @@ function changeSlide(n) {
   slideIndex += n;
   showSlide(slideIndex);
 }
-
 function goToSlide(n) {
   slideIndex = n;
   showSlide(slideIndex);
@@ -89,14 +86,18 @@ async function loadMovies() {
 
   try {
     const snapshot = await getDocs(collection(db, "movies"));
-
     grid.innerHTML = "";
 
     snapshot.forEach((doc) => {
       const m = doc.data();
 
       grid.innerHTML += `
-        <div class="movie-card" data-title="${m.title.toLowerCase()}">
+        <div class="movie-card" data-title="${m.title.toLowerCase()}"
+             data-poster="${m.poster}"
+             data-genre="${m.genre}"
+             data-age="${m.age}"
+             data-duration="${m.duration}"
+             data-year="${m.year}">
           <div class="movie-poster">
             <img src="${m.poster}" alt="${m.title}" />
             <div class="movie-rating">
@@ -120,7 +121,7 @@ async function loadMovies() {
               </span>
               <span>${m.year}</span>
             </div>
-            <button class="btn-booking" onclick="handleBooking()">Book Now</button>
+            <button class="btn-booking" onclick="handleBooking(this)">Book Now</button>
           </div>
         </div>
       `;
@@ -136,15 +137,35 @@ async function loadMovies() {
 }
 
 // ─────────────────────────────────────────
-//   BOOKING GUARD
+//   BOOKING GUARD — pass movie data in URL
 // ─────────────────────────────────────────
-function handleBooking() {
+function handleBooking(btn) {
   const user = auth.currentUser;
   if (!user) {
     alert("Please sign in to book tickets.");
-  } else {
-    window.location.href = "roomchoosing.html";
+    return;
   }
+
+  // Get movie data from the card's data attributes
+  const card = btn.closest(".movie-card");
+  const title = card.querySelector(".movie-title").textContent;
+  const poster = card.dataset.poster;
+  const genre = card.dataset.genre;
+  const age = card.dataset.age;
+  const duration = card.dataset.duration;
+  const year = card.dataset.year;
+
+  // Build URL with all movie info
+  const params = new URLSearchParams({
+    title,
+    poster,
+    genre,
+    age,
+    duration,
+    year,
+  });
+
+  window.location.href = `roomchoosing.html?${params.toString()}`;
 }
 
 window.handleBooking = handleBooking;
@@ -153,7 +174,7 @@ window.handleBooking = handleBooking;
 //   CAROUSEL
 // ─────────────────────────────────────────
 const CARDS_PER_PAGE = 3;
-let carouselGoToPage = null; // exposed so search can use it
+let carouselGoToPage = null;
 
 function initCarousel() {
   const cards = Array.from(document.querySelectorAll(".movie-card"));
@@ -174,26 +195,18 @@ function initCarousel() {
 
   function goToPage(page) {
     currentPage = page;
-
     cards.forEach((card, index) => {
       const start = page * CARDS_PER_PAGE;
       const end = start + CARDS_PER_PAGE;
-      if (index >= start && index < end) {
-        card.classList.remove("hidden");
-      } else {
-        card.classList.add("hidden");
-      }
+      card.classList.toggle("hidden", index < start || index >= end);
     });
-
     document.querySelectorAll(".carousel-dot").forEach((dot, i) => {
       dot.classList.toggle("active", i === page);
     });
-
     prevBtn.disabled = currentPage === 0;
     nextBtn.disabled = currentPage === totalPages - 1;
   }
 
-  // Expose goToPage so search can switch pages
   carouselGoToPage = goToPage;
 
   prevBtn.addEventListener("click", () => {
@@ -218,8 +231,6 @@ function initSearch() {
     if (!query) return;
 
     const cards = Array.from(document.querySelectorAll(".movie-card"));
-
-    // Find the matching card
     const matchedCard = cards.find((card) =>
       card.dataset.title.includes(query),
     );
@@ -229,30 +240,23 @@ function initSearch() {
       return;
     }
 
-    // Figure out which page the matched card is on
     const cardIndex = cards.indexOf(matchedCard);
     const targetPage = Math.floor(cardIndex / CARDS_PER_PAGE);
 
-    // Switch to that page first
     if (carouselGoToPage) carouselGoToPage(targetPage);
 
-    // Highlight the card briefly
     matchedCard.classList.add("search-highlight");
     setTimeout(() => matchedCard.classList.remove("search-highlight"), 2000);
 
-    // Smooth scroll to the movies section then to the card
-    const moviesSection = document.querySelector(".movies-section");
-    moviesSection.scrollIntoView({ behavior: "smooth" });
-
+    document
+      .querySelector(".movies-section")
+      .scrollIntoView({ behavior: "smooth" });
     setTimeout(() => {
       matchedCard.scrollIntoView({ behavior: "smooth", block: "center" });
     }, 400);
   }
 
-  // Search on button click
   searchBtn.addEventListener("click", doSearch);
-
-  // Search on Enter key
   searchInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") doSearch();
   });

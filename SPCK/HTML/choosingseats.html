@@ -7,9 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-    <!-- Shared styles -->
     <link rel="stylesheet" href="/SPCK/CSS/style.css" />
-    <!-- Page-specific styles -->
     <link rel="stylesheet" href="/SPCK/CSS/seats.css" />
   </head>
   <body>
@@ -42,21 +40,15 @@
         <span>›</span>
         <a href="#">Movies</a>
         <span>›</span>
-        <a href="booking.html">Select Room</a>
+        <a href="javascript:history.back()">Select Room</a>
         <span>›</span>
         Select Seats
       </div>
       <div class="movie-summary">
-        <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" alt="Movie Poster" />
+        <img id="hero-poster" src="" alt="Movie Poster" />
         <div class="movie-summary-info">
-          <h1>Interstellar</h1>
-          <div class="tags">
-            <span class="tag-pill accent">PG-13</span>
-            <span class="tag-pill">Sci-Fi · Adventure</span>
-            <span class="tag-pill">169 min</span>
-            <span class="tag-pill" id="room-tag">Room —</span>
-            <span class="tag-pill">19:30</span>
-          </div>
+          <h1 id="hero-title"></h1>
+          <div class="tags" id="hero-tags"></div>
         </div>
       </div>
     </div>
@@ -82,7 +74,6 @@
     <!-- ═══ MAIN LAYOUT ═══ -->
     <div class="seat-page-layout">
 
-      <!-- Cinema area -->
       <div class="cinema-area">
         <div class="room-badge" id="roomBadge">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -90,36 +81,21 @@
             <line x1="8" y1="21" x2="16" y2="21"/>
             <line x1="12" y1="17" x2="12" y2="21"/>
           </svg>
-          Room 1 · Standard
+          Room —
         </div>
 
-        <!-- Screen -->
         <div class="screen-wrap">
           <div class="screen"></div>
           <div class="screen-label">Screen</div>
         </div>
 
-        <!-- Legend -->
         <div class="legend">
-          <div class="legend-item">
-            <div class="legend-dot available"></div>
-            Available
-          </div>
-          <div class="legend-item">
-            <div class="legend-dot selected"></div>
-            Selected
-          </div>
-          <div class="legend-item">
-            <div class="legend-dot taken"></div>
-            Taken
-          </div>
-          <div class="legend-item">
-            <div class="legend-dot vip"></div>
-            VIP
-          </div>
+          <div class="legend-item"><div class="legend-dot available"></div> Available</div>
+          <div class="legend-item"><div class="legend-dot selected"></div> Selected</div>
+          <div class="legend-item"><div class="legend-dot taken"></div> Taken</div>
+          <div class="legend-item"><div class="legend-dot vip"></div> VIP</div>
         </div>
 
-        <!-- Seat grid built by JS -->
         <div class="seat-grid" id="seatGrid"></div>
       </div>
 
@@ -129,19 +105,19 @@
 
         <div class="summary-row">
           <span class="label">Movie</span>
-          <span class="value">Interstellar</span>
+          <span class="value" id="summaryMovie">—</span>
         </div>
         <div class="summary-row">
           <span class="label">Room</span>
-          <span class="value" id="summaryRoom">Room 1</span>
+          <span class="value" id="summaryRoom">—</span>
         </div>
         <div class="summary-row">
           <span class="label">Date</span>
-          <span class="value">Today</span>
+          <span class="value" id="summaryDate">—</span>
         </div>
         <div class="summary-row">
           <span class="label">Showtime</span>
-          <span class="value">19:30</span>
+          <span class="value" id="summaryTime">—</span>
         </div>
         <div class="summary-row">
           <span class="label">Seats</span>
@@ -158,7 +134,7 @@
         </div>
 
         <button class="btn-confirm" id="confirmBtn" disabled>Confirm Seats</button>
-        <a href="booking.html" class="btn-back">← Change Room</a>
+        <a href="javascript:history.back()" class="btn-back">← Change Room</a>
       </div>
 
     </div>

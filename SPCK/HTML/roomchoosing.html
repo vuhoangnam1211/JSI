@@ -7,9 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-    <!-- Shared styles -->
     <link rel="stylesheet" href="/SPCK/CSS/style.css" />
-    <!-- Page-specific styles -->
     <link rel="stylesheet" href="/SPCK/CSS/booking.css" />
   </head>
   <body>
@@ -31,7 +29,7 @@
       </div>
       <nav>
         <a href="index.html">Home</a>
-        <a href="#" class="btn-logout">Log Out</a>
+        <a href="#" class="btn-logout" id="logoutBtn">Log Out</a>
       </nav>
     </header>
 
@@ -45,15 +43,10 @@
         Book Tickets
       </div>
       <div class="movie-summary">
-        <img src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" alt="Movie Poster" id="hero-poster" />
+        <img id="hero-poster" src="" alt="Movie Poster" />
         <div class="movie-summary-info">
-          <h1 id="hero-title">Interstellar</h1>
-          <div class="tags">
-            <span class="tag-pill accent">PG-13</span>
-            <span class="tag-pill">Sci-Fi · Adventure</span>
-            <span class="tag-pill">169 min</span>
-            <span class="tag-pill">2014</span>
-          </div>
+          <h1 id="hero-title"></h1>
+          <div class="tags" id="hero-tags"></div>
         </div>
       </div>
     </div>
@@ -79,16 +72,14 @@
     <!-- ═══ BOOKING BODY ═══ -->
     <div class="booking-body">
 
-      <!-- Date picker -->
       <div class="section-label">Choose Date</div>
       <div class="date-row" id="dateRow"></div>
 
-      <!-- Room picker -->
       <div class="section-label">Choose Room</div>
-      <div class="rooms-grid">
+      <div class="rooms-grid" id="roomsGrid">
 
         <!-- Room 1 -->
-        <a class="room-card" href="choosingseats.html">
+        <div class="room-card" data-room="1" data-type="Standard">
           <div class="room-number">01</div>
           <div class="room-type">Standard</div>
           <div class="room-info-row">
@@ -106,15 +97,15 @@
             <span class="avail-text">45 left</span>
           </div>
           <div class="showtime-chips">
-            <span class="showtime-chip">10:00</span>
-            <span class="showtime-chip">13:30</span>
+            <span class="showtime-chip" data-time="10:00">10:00</span>
+            <span class="showtime-chip" data-time="13:30">13:30</span>
             <span class="showtime-chip sold-out">16:00</span>
-            <span class="showtime-chip">19:30</span>
+            <span class="showtime-chip" data-time="19:30">19:30</span>
           </div>
-        </a>
+        </div>
 
         <!-- Room 2 -->
-        <a class="room-card" href="choosingseats.html">
+        <div class="room-card" data-room="2" data-type="IMAX">
           <div class="room-number">02</div>
           <div class="room-type">IMAX</div>
           <div class="room-info-row">
@@ -133,14 +124,14 @@
           </div>
           <div class="showtime-chips">
             <span class="showtime-chip sold-out">09:00</span>
-            <span class="showtime-chip">12:00</span>
-            <span class="showtime-chip">15:30</span>
-            <span class="showtime-chip">20:00</span>
+            <span class="showtime-chip" data-time="12:00">12:00</span>
+            <span class="showtime-chip" data-time="15:30">15:30</span>
+            <span class="showtime-chip" data-time="20:00">20:00</span>
           </div>
-        </a>
+        </div>
 
         <!-- Room 3 -->
-        <a class="room-card" href="choosingseats.html">
+        <div class="room-card" data-room="3" data-type="4DX">
           <div class="room-number">03</div>
           <div class="room-type">4DX</div>
           <div class="room-info-row">
@@ -160,13 +151,13 @@
           <div class="showtime-chips">
             <span class="showtime-chip sold-out">11:00</span>
             <span class="showtime-chip sold-out">14:00</span>
-            <span class="showtime-chip">17:30</span>
-            <span class="showtime-chip">21:00</span>
+            <span class="showtime-chip" data-time="17:30">17:30</span>
+            <span class="showtime-chip" data-time="21:00">21:00</span>
           </div>
-        </a>
+        </div>
 
         <!-- Room 4 -->
-        <a class="room-card" href="choosingseats.html">
+        <div class="room-card" data-room="4" data-type="Standard">
           <div class="room-number">04</div>
           <div class="room-type">Standard</div>
           <div class="room-info-row">
@@ -184,15 +175,15 @@
             <span class="avail-text">50 left</span>
           </div>
           <div class="showtime-chips">
-            <span class="showtime-chip">10:30</span>
-            <span class="showtime-chip">14:30</span>
-            <span class="showtime-chip">18:00</span>
-            <span class="showtime-chip">21:30</span>
+            <span class="showtime-chip" data-time="10:30">10:30</span>
+            <span class="showtime-chip" data-time="14:30">14:30</span>
+            <span class="showtime-chip" data-time="18:00">18:00</span>
+            <span class="showtime-chip" data-time="21:30">21:30</span>
           </div>
-        </a>
+        </div>
 
         <!-- Room 5 -->
-        <a class="room-card" href="choosingseats.html">
+        <div class="room-card" data-room="5" data-type="VIP">
           <div class="room-number">05</div>
           <div class="room-type">VIP</div>
           <div class="room-info-row">
@@ -210,14 +201,14 @@
             <span class="avail-text">16 left</span>
           </div>
           <div class="showtime-chips">
-            <span class="showtime-chip">13:00</span>
+            <span class="showtime-chip" data-time="13:00">13:00</span>
             <span class="showtime-chip sold-out">17:00</span>
-            <span class="showtime-chip">20:30</span>
+            <span class="showtime-chip" data-time="20:30">20:30</span>
           </div>
-        </a>
+        </div>
 
         <!-- Room 6 -->
-        <a class="room-card" href="choosingseats.html">
+        <div class="room-card" data-room="6" data-type="Standard">
           <div class="room-number">06</div>
           <div class="room-type">Standard</div>
           <div class="room-info-row">
@@ -235,15 +226,15 @@
             <span class="avail-text">39 left</span>
           </div>
           <div class="showtime-chips">
-            <span class="showtime-chip">09:30</span>
-            <span class="showtime-chip">12:30</span>
-            <span class="showtime-chip">16:30</span>
-            <span class="showtime-chip">19:00</span>
+            <span class="showtime-chip" data-time="09:30">09:30</span>
+            <span class="showtime-chip" data-time="12:30">12:30</span>
+            <span class="showtime-chip" data-time="16:30">16:30</span>
+            <span class="showtime-chip" data-time="19:00">19:00</span>
           </div>
-        </a>
+        </div>
 
         <!-- Room 7 -->
-        <a class="room-card" href="choosingseats.html">
+        <div class="room-card" data-room="7" data-type="Dolby Atmos">
           <div class="room-number">07</div>
           <div class="room-type">Dolby Atmos</div>
           <div class="room-info-row">
@@ -262,14 +253,14 @@
           </div>
           <div class="showtime-chips">
             <span class="showtime-chip sold-out">10:00</span>
-            <span class="showtime-chip">14:00</span>
-            <span class="showtime-chip">18:30</span>
-            <span class="showtime-chip">22:00</span>
+            <span class="showtime-chip" data-time="14:00">14:00</span>
+            <span class="showtime-chip" data-time="18:30">18:30</span>
+            <span class="showtime-chip" data-time="22:00">22:00</span>
           </div>
-        </a>
+        </div>
 
         <!-- Room 8 -->
-        <a class="room-card" href="choosingseats.html">
+        <div class="room-card" data-room="8" data-type="Standard">
           <div class="room-number">08</div>
           <div class="room-type">Standard</div>
           <div class="room-info-row">
@@ -289,13 +280,13 @@
           <div class="showtime-chips">
             <span class="showtime-chip sold-out">11:30</span>
             <span class="showtime-chip sold-out">15:00</span>
-            <span class="showtime-chip">19:00</span>
+            <span class="showtime-chip" data-time="19:00">19:00</span>
             <span class="showtime-chip sold-out">22:30</span>
           </div>
-        </a>
+        </div>
 
         <!-- Room 9 -->
-        <a class="room-card" href="choosingseats.html">
+        <div class="room-card" data-room="9" data-type="Standard">
           <div class="room-number">09</div>
           <div class="room-type">Standard</div>
           <div class="room-info-row">
@@ -313,15 +304,15 @@
             <span class="avail-text">48 left</span>
           </div>
           <div class="showtime-chips">
-            <span class="showtime-chip">09:00</span>
-            <span class="showtime-chip">13:00</span>
-            <span class="showtime-chip">17:00</span>
-            <span class="showtime-chip">21:00</span>
+            <span class="showtime-chip" data-time="09:00">09:00</span>
+            <span class="showtime-chip" data-time="13:00">13:00</span>
+            <span class="showtime-chip" data-time="17:00">17:00</span>
+            <span class="showtime-chip" data-time="21:00">21:00</span>
           </div>
-        </a>
+        </div>
 
         <!-- Room 10 -->
-        <a class="room-card" href="choosingseats.html">
+        <div class="room-card" data-room="10" data-type="VIP Lounge">
           <div class="room-number">10</div>
           <div class="room-type">VIP Lounge</div>
           <div class="room-info-row">
@@ -339,11 +330,11 @@
             <span class="avail-text">14 left</span>
           </div>
           <div class="showtime-chips">
-            <span class="showtime-chip">12:00</span>
-            <span class="showtime-chip">16:00</span>
-            <span class="showtime-chip">20:00</span>
+            <span class="showtime-chip" data-time="12:00">12:00</span>
+            <span class="showtime-chip" data-time="16:00">16:00</span>
+            <span class="showtime-chip" data-time="20:00">20:00</span>
           </div>
-        </a>
+        </div>
 
       </div>
     </div>
@@ -353,7 +344,6 @@
       <p>© 2026 <span>CineVerse</span>. All Rights Reserved.</p>
     </footer>
 
-    <script src="/SPCK/JS/"></script>
-    <script src="../JS/boo"></script>
+    <script type="module" src="/SPCK/JS/roomchoosing.js"></script>
   </body>
 </html>
