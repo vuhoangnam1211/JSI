@@ -2,6 +2,12 @@
    CineVerse — seats.js  (Select Seats)
 ───────────────────────────────────────── */
 
+import { auth } from "./firebase.js";
+import {
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+
 (function () {
   "use strict";
 
@@ -10,7 +16,7 @@
   const SEATS_PER_ROW = 8;
   const TICKET_PRICE = 12.5;
   const VIP_PRICE = 18.0;
-  const VIP_ROWS = ["G", "H"]; // last 2 rows are VIP
+  const VIP_ROWS = ["G", "H"];
 
   const ROOM_TYPES = {
     1: "Standard",
@@ -25,7 +31,6 @@
     10: "VIP Lounge",
   };
 
-  /* Pre-taken seats (simulates data from server) */
   const TAKEN_SEATS = new Set([
     "A3",
     "A4",
@@ -65,6 +70,53 @@
   const roomNum = params.get("room") || "1";
   const roomType = ROOM_TYPES[roomNum] || "Standard";
 
+  /* ── Auth guard + Nav bar ── */
+  onAuthStateChanged(auth, (user) => {
+    const nav = document.querySelector("nav");
+
+    if (user) {
+      // Logged in — show Log Out
+      nav.innerHTML = `
+        <a href="index.html">Home</a>
+        <a href="#" class="btn-logout" id="logoutBtn">Log Out</a>
+      `;
+      document
+        .getElementById("logoutBtn")
+        .addEventListener("click", async () => {
+          await signOut(auth);
+          window.location.href = "/SPCK/HTML/signin.html";
+        });
+
+      // Allow seat selection
+      initRoomLabels();
+      buildSeatGrid();
+      if (confirmBtn) confirmBtn.addEventListener("click", handleConfirm);
+    } else {
+      // Not logged in — show Sign In / Sign Up
+      nav.innerHTML = `
+        <a href="index.html">Home</a>
+        <a href="/SPCK/HTML/signin.html" class="btn-logout">Sign In</a>
+        <a href="/SPCK/HTML/signup.html" class="btn-logout">Sign Up</a>
+      `;
+
+      // Block seat grid
+      if (seatGrid) {
+        seatGrid.innerHTML = `
+          <div style="text-align:center; padding: 40px 20px;">
+            <p style="font-size:18px; font-weight:600; color:var(--text); margin-bottom:12px;">🔒 Please sign in to select seats</p>
+            <p style="font-size:14px; color:var(--text-muted); margin-bottom:20px;">You need an account to book tickets.</p>
+            <a href="/SPCK/HTML/signin.html" style="background:var(--accent);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Sign In</a>
+          </div>
+        `;
+      }
+
+      if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = "Sign in to confirm";
+      }
+    }
+  });
+
   /* ── Initialise room labels ── */
   function initRoomLabels() {
     const screenIcon = `
@@ -94,9 +146,7 @@
     headerRow.appendChild(emptyLabel);
 
     for (let s = 1; s <= SEATS_PER_ROW; s++) {
-      if (s === 5) {
-        headerRow.appendChild(createGap());
-      }
+      if (s === 5) headerRow.appendChild(createGap());
       const lbl = document.createElement("div");
       lbl.style.cssText =
         "width:34px;text-align:center;font-size:10px;font-weight:700;color:var(--text-muted);flex-shrink:0;";
@@ -118,7 +168,6 @@
       const isVip = VIP_ROWS.includes(row);
 
       for (let s = 1; s <= SEATS_PER_ROW; s++) {
-        // Aisle gap after seat 4
         if (s === 5) rowEl.appendChild(createGap());
 
         const seatId = `${row}${s}`;
@@ -183,7 +232,6 @@
       chip.className = "seat-chip";
       chip.textContent = id;
       selectedDisplay.appendChild(chip);
-
       total += VIP_ROWS.includes(id[0]) ? VIP_PRICE : TICKET_PRICE;
     });
 
@@ -198,11 +246,4 @@
       `Booking confirmed!\n\nMovie: Interstellar\nRoom: ${roomNum}\nSeats: ${seats}\n\nThank you!`,
     );
   }
-
-  /* ── Boot ── */
-  document.addEventListener("DOMContentLoaded", () => {
-    initRoomLabels();
-    buildSeatGrid();
-    if (confirmBtn) confirmBtn.addEventListener("click", handleConfirm);
-  });
 })();

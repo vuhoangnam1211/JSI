@@ -1,8 +1,36 @@
-import { db } from "./firebase.js";
+import { db, auth } from "./firebase.js";
 import {
   collection,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+import {
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+
+// ─────────────────────────────────────────
+//   AUTH — Nav bar switching + Log Out
+// ─────────────────────────────────────────
+const nav = document.querySelector("nav");
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    nav.innerHTML = `
+      <a href="#" class="active">Home</a>
+      <a href="#" class="btn-logout" id="logoutBtn">Log Out</a>
+    `;
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/SPCK/HTML/signin.html";
+    });
+  } else {
+    nav.innerHTML = `
+      <a href="#" class="active">Home</a>
+      <a href="/SPCK/HTML/signin.html" class="btn-logout">Sign In</a>
+      <a href="/SPCK/HTML/signup.html" class="btn-logout">Sign Up</a>
+    `;
+  }
+});
 
 // ─────────────────────────────────────────
 //   SLIDESHOW
@@ -32,18 +60,26 @@ function goToSlide(n) {
   showSlide(slideIndex);
 }
 
-// Expose to window so inline onclick attributes work
 window.changeSlide = changeSlide;
 window.goToSlide = goToSlide;
 
-// Auto-advance every 5 seconds
 setInterval(() => changeSlide(1), 5000);
-
-// Show first slide on load
 showSlide(slideIndex);
 
 // ─────────────────────────────────────────
-//   MOVIES
+//   FILTER TABS
+// ─────────────────────────────────────────
+document.querySelectorAll(".tab").forEach((tab) => {
+  tab.addEventListener("click", function () {
+    document
+      .querySelectorAll(".tab")
+      .forEach((t) => t.classList.remove("active"));
+    this.classList.add("active");
+  });
+});
+
+// ─────────────────────────────────────────
+//   MOVIES — Load from Firestore
 // ─────────────────────────────────────────
 async function loadMovies() {
   const grid = document.getElementById("movieGrid");
@@ -60,7 +96,7 @@ async function loadMovies() {
       const m = doc.data();
 
       grid.innerHTML += `
-        <div class="movie-card">
+        <div class="movie-card" data-title="${m.title.toLowerCase()}">
           <div class="movie-poster">
             <img src="${m.poster}" alt="${m.title}" />
             <div class="movie-rating">
@@ -84,13 +120,14 @@ async function loadMovies() {
               </span>
               <span>${m.year}</span>
             </div>
-            <button class="btn-booking" onclick="window.location.href='roomchoosing.html'">Book Now</button>
+            <button class="btn-booking" onclick="handleBooking()">Book Now</button>
           </div>
         </div>
       `;
     });
 
     initCarousel();
+    initSearch();
   } catch (error) {
     grid.innerHTML =
       '<p style="color:red;padding:20px;">Failed to load movies. Check your Firebase config.</p>';
@@ -99,10 +136,26 @@ async function loadMovies() {
 }
 
 // ─────────────────────────────────────────
+//   BOOKING GUARD
+// ─────────────────────────────────────────
+function handleBooking() {
+  const user = auth.currentUser;
+  if (!user) {
+    alert("Please sign in to book tickets.");
+  } else {
+    window.location.href = "roomchoosing.html";
+  }
+}
+
+window.handleBooking = handleBooking;
+
+// ─────────────────────────────────────────
 //   CAROUSEL
 // ─────────────────────────────────────────
+const CARDS_PER_PAGE = 3;
+let carouselGoToPage = null; // exposed so search can use it
+
 function initCarousel() {
-  const CARDS_PER_PAGE = 3;
   const cards = Array.from(document.querySelectorAll(".movie-card"));
   const prevBtn = document.getElementById("carouselPrev");
   const nextBtn = document.getElementById("carouselNext");
@@ -140,6 +193,9 @@ function initCarousel() {
     nextBtn.disabled = currentPage === totalPages - 1;
   }
 
+  // Expose goToPage so search can switch pages
+  carouselGoToPage = goToPage;
+
   prevBtn.addEventListener("click", () => {
     if (currentPage > 0) goToPage(currentPage - 1);
   });
@@ -148,6 +204,58 @@ function initCarousel() {
   });
 
   goToPage(0);
+}
+
+// ─────────────────────────────────────────
+//   SEARCH
+// ─────────────────────────────────────────
+function initSearch() {
+  const searchInput = document.querySelector(".search-box input");
+  const searchBtn = document.querySelector(".search-box button");
+
+  function doSearch() {
+    const query = searchInput.value.trim().toLowerCase();
+    if (!query) return;
+
+    const cards = Array.from(document.querySelectorAll(".movie-card"));
+
+    // Find the matching card
+    const matchedCard = cards.find((card) =>
+      card.dataset.title.includes(query),
+    );
+
+    if (!matchedCard) {
+      alert(`No movie found for "${searchInput.value}".`);
+      return;
+    }
+
+    // Figure out which page the matched card is on
+    const cardIndex = cards.indexOf(matchedCard);
+    const targetPage = Math.floor(cardIndex / CARDS_PER_PAGE);
+
+    // Switch to that page first
+    if (carouselGoToPage) carouselGoToPage(targetPage);
+
+    // Highlight the card briefly
+    matchedCard.classList.add("search-highlight");
+    setTimeout(() => matchedCard.classList.remove("search-highlight"), 2000);
+
+    // Smooth scroll to the movies section then to the card
+    const moviesSection = document.querySelector(".movies-section");
+    moviesSection.scrollIntoView({ behavior: "smooth" });
+
+    setTimeout(() => {
+      matchedCard.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 400);
+  }
+
+  // Search on button click
+  searchBtn.addEventListener("click", doSearch);
+
+  // Search on Enter key
+  searchInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") doSearch();
+  });
 }
 
 loadMovies();
