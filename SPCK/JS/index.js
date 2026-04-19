@@ -2,7 +2,7 @@ import { db } from "./firebase.js";
 import {
   collection,
   getDocs,
-} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 // ─────────────────────────────────────────
 //   SLIDESHOW
