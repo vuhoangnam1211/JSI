@@ -31,11 +31,11 @@ onAuthStateChanged(auth, async (user) => {
     let navHTML = `<a href="#" class="active">Home</a>`;
 
     if (isAdmin) {
-      navHTML += `<a href="/SPCK/HTML/admin.html" style="color:var(--gold);">Admin Panel</a>`;
+      navHTML += `<a href="../SPCK/HTML/admin.html" style="color:var(--gold);">Admin Panel</a>`;
     }
 
     if (hasBookings) {
-      navHTML += `<a href="/SPCK/HTML/mybookings.html">Bookings</a>`;
+      navHTML += `<a href="../SPCK/HTML/mybookings.html">Bookings</a>`;
     }
 
     navHTML += `<a href="#" class="btn-logout" id="logoutBtn">Log Out</a>`;

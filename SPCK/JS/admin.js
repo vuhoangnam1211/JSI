@@ -27,7 +27,7 @@ let confirmCallback = null;
 // ─── Auth Guard ──────────────────────────
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    window.location.href = "signin.html";
+    window.location.href = "sign.html";
     return;
   }
 
