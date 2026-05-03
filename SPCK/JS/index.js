@@ -31,7 +31,9 @@ onAuthStateChanged(auth, async (user) => {
     let navHTML = `<a href="#" class="active">Home</a>`;
 
     if (isAdmin) {
-      navHTML += `<a href="./HTML/admin.html" style="color:var(--gold);">Admin Panel</a>`;
+      document.getElementById("adminLink")?.addEventListener("click", () => {
+        window.location.href = "/SPCK/HTML/admin.html";
+      });
     }
 
     if (hasBookings) {
