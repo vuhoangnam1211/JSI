@@ -2,6 +2,8 @@ import { db, auth } from "./firebase.js";
 import {
   collection,
   getDocs,
+  getDoc,
+  doc,
   query,
   where,
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
@@ -17,23 +19,28 @@ const nav = document.querySelector("nav");
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    // Check if user has any bookings
-    const hasBookings = await checkUserHasBookings(user.uid);
+    // Check bookings and admin status at the same time
+    const [hasBookings, adminSnap] = await Promise.all([
+      checkUserHasBookings(user.uid),
+      getDoc(doc(db, "admins", user.uid)),
+    ]);
+
+    const isAdmin = adminSnap.exists();
+
+    // Build nav — Home, then Admin Panel (if admin), then Bookings (if has bookings), then Log Out
+    let navHTML = `<a href="#" class="active">Home</a>`;
+
+    if (isAdmin) {
+      navHTML += `<a href="/SPCK/HTML/admin.html" style="color:var(--gold);">Admin Panel</a>`;
+    }
 
     if (hasBookings) {
-      // Show Home + Bookings + Log Out
-      nav.innerHTML = `
-        <a href="#" class="active">Home</a>
-        <a href="/SPCK/HTML/mybookings.html">Bookings</a>
-        <a href="#" class="btn-logout" id="logoutBtn">Log Out</a>
-      `;
-    } else {
-      // Show Home + Log Out only
-      nav.innerHTML = `
-        <a href="#" class="active">Home</a>
-        <a href="#" class="btn-logout" id="logoutBtn">Log Out</a>
-      `;
+      navHTML += `<a href="/SPCK/HTML/mybookings.html">Bookings</a>`;
     }
+
+    navHTML += `<a href="#" class="btn-logout" id="logoutBtn">Log Out</a>`;
+
+    nav.innerHTML = navHTML;
 
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       await signOut(auth);
@@ -119,8 +126,8 @@ async function loadMovies() {
     const snapshot = await getDocs(collection(db, "movies"));
     grid.innerHTML = "";
 
-    snapshot.forEach((doc) => {
-      const m = doc.data();
+    snapshot.forEach((docSnap) => {
+      const m = docSnap.data();
 
       grid.innerHTML += `
         <div class="movie-card" data-title="${m.title.toLowerCase()}"
