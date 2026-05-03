@@ -2,11 +2,16 @@
    CineVerse — seats.js  (Select Seats)
 ───────────────────────────────────────── */
 
-import { auth } from "./firebase.js";
+import { auth, db } from "./firebase.js";
 import {
   onAuthStateChanged,
   signOut,
-} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 (function () {
   "use strict";
@@ -68,6 +73,7 @@ import {
 
   /* ── State ── */
   let selectedSeats = new Set();
+  let currentUser = null;
 
   /* ── DOM references ── */
   const seatGrid = document.getElementById("seatGrid");
@@ -79,6 +85,7 @@ import {
   /* ── Auth guard + Nav bar ── */
   onAuthStateChanged(auth, (user) => {
     const nav = document.querySelector("nav");
+    currentUser = user;
 
     if (user) {
       nav.innerHTML = `
@@ -117,14 +124,12 @@ import {
         confirmBtn.textContent = "Sign in to confirm";
       }
 
-      // Still populate the hero so it doesn't look blank
       initPage();
     }
   });
 
   /* ── Populate hero + summary with URL data ── */
   function initPage() {
-    // Hero poster & title
     const heroPoster = document.getElementById("hero-poster");
     const heroTitle = document.getElementById("hero-title");
     const heroTags = document.getElementById("hero-tags");
@@ -143,12 +148,10 @@ import {
       <span class="tag-pill">${time}</span>
     `;
 
-    // Room badge
     const screenIcon = `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`;
     if (roomBadge)
       roomBadge.innerHTML = `${screenIcon} Room ${roomNum} · ${roomType}`;
 
-    // Summary panel
     const summaryMovie = document.getElementById("summaryMovie");
     const summaryRoom = document.getElementById("summaryRoom");
     const summaryDate = document.getElementById("summaryDate");
@@ -164,7 +167,6 @@ import {
   function buildSeatGrid() {
     if (!seatGrid) return;
 
-    // Column number header
     const headerRow = document.createElement("div");
     headerRow.className = "seat-row";
     const emptyLabel = document.createElement("div");
@@ -264,11 +266,47 @@ import {
     confirmBtn.disabled = false;
   }
 
-  /* ── Confirm booking ── */
-  function handleConfirm() {
-    const seats = [...selectedSeats].sort().join(", ");
-    alert(
-      `Booking confirmed!\n\nMovie: ${title}\nRoom: ${roomNum} · ${roomType}\nDate: ${date}\nShowtime: ${time}\nSeats: ${seats}\nTotal: $${[...selectedSeats].reduce((t, id) => t + (VIP_ROWS.includes(id[0]) ? VIP_PRICE : TICKET_PRICE), 0).toFixed(2)}\n\nThank you!`,
+  /* ── Confirm booking — saves to Firestore ── */
+  async function handleConfirm() {
+    if (!currentUser) {
+      alert("Please sign in to confirm your booking.");
+      return;
+    }
+
+    const seats = [...selectedSeats].sort();
+    const total = seats.reduce(
+      (t, id) => t + (VIP_ROWS.includes(id[0]) ? VIP_PRICE : TICKET_PRICE),
+      0,
     );
+
+    // Disable button while saving
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = "Saving...";
+
+    try {
+      await addDoc(collection(db, "bookings"), {
+        userId: currentUser.uid,
+        userEmail: currentUser.email,
+        movie: title,
+        room: `Room ${roomNum} · ${roomType}`,
+        date: date,
+        time: time,
+        seats: seats,
+        total: total,
+        bookedAt: serverTimestamp(),
+      });
+
+      alert(
+        `Booking confirmed! ✅\n\nMovie: ${title}\nRoom: ${roomNum} · ${roomType}\nDate: ${date}\nShowtime: ${time}\nSeats: ${seats.join(", ")}\nTotal: $${total.toFixed(2)}\n\nThank you!`,
+      );
+
+      // Redirect to home after booking
+      window.location.href = "main.html";
+    } catch (error) {
+      console.error("Booking error:", error);
+      alert("Failed to save booking. Please try again.");
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = "Confirm Seats";
+    }
   }
 })();

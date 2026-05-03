@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CineVerse - My Bookings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/SPCK/CSS/style.css" />
+    <style>
+      .bookings-page {
+        padding: 48px 52px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .bookings-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 36px;
+        letter-spacing: 2px;
+        color: var(--text);
+        margin-bottom: 32px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .bookings-title::after {
+        content: "";
+        flex: 1;
+        height: 3px;
+        background: var(--accent);
+        border-radius: 2px;
+        max-width: 60px;
+      }
+      .booking-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 24px 28px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow-card);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 32px;
+        position: relative;
+      }
+      .booking-card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--accent);
+        border-radius: var(--radius) 0 0 var(--radius);
+      }
+      .booking-movie {
+        grid-column: 1 / -1;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 24px;
+        letter-spacing: 1px;
+        color: var(--text);
+        margin-bottom: 4px;
+      }
+      .booking-row {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .booking-label {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+      .booking-value {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--text);
+      }
+      .booking-seats {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 4px;
+      }
+      .seat-chip {
+        background: rgba(192, 57, 43, 0.12);
+        color: var(--accent);
+        border: 1px solid rgba(192, 57, 43, 0.25);
+        font-size: 12px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 6px;
+      }
+      .booking-total {
+        grid-column: 1 / -1;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 22px;
+        color: var(--accent);
+        letter-spacing: 1px;
+        margin-top: 8px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+      }
+      .no-bookings {
+        text-align: center;
+        padding: 60px 20px;
+        color: var(--text-muted);
+      }
+      .no-bookings p {
+        font-size: 18px;
+        margin-bottom: 16px;
+      }
+      .no-bookings a {
+        background: var(--accent);
+        color: #fff;
+        padding: 12px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .loading-msg {
+        color: var(--text-muted);
+        padding: 40px 0;
+        text-align: center;
+      }
+      @media (max-width: 600px) {
+        .bookings-page {
+          padding: 24px 20px;
+        }
+        .booking-card {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ═══ HEADER ═══ -->
+    <header>
+      <a class="nav-brand" href="main.html">
+        <img
+          class="nav-logo"
+          src="https://img.icons8.com/fluency/96/cinema-.png"
+          alt="CineVerse Logo"
+        />
+        <span class="nav-title">Cine<span>Verse</span></span>
+      </a>
+      <div class="search-box">
+        <input type="text" placeholder="Search movies, genres, actors..." />
+        <button>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </button>
+      </div>
+      <nav id="mainNav">
+        <a href="main.html">Home</a>
+        <a href="/SPCK/HTML/mybookings.html" class="active">Bookings</a>
+        <a href="#" class="btn-logout" id="logoutBtn">Log Out</a>
+      </nav>
+    </header>
+
+    <!-- ═══ BOOKINGS BODY ═══ -->
+    <div class="bookings-page">
+      <div class="bookings-title">My Bookings</div>
+      <div id="bookingsList">
+        <p class="loading-msg">Loading your bookings...</p>
+      </div>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer>
+      <p>© 2026 <span>CineVerse</span>. All Rights Reserved.</p>
+    </footer>
+
+    <script type="module" src="/SPCK/JS/mybookings.js"></script>
+  </body>
+</html>

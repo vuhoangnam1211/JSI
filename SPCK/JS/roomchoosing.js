@@ -6,7 +6,7 @@ import { auth } from "./firebase.js";
 import {
   onAuthStateChanged,
   signOut,
-} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 // ── Auth nav bar ──
 onAuthStateChanged(auth, (user) => {

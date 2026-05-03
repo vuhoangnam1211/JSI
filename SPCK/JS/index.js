@@ -2,28 +2,45 @@ import { db, auth } from "./firebase.js";
 import {
   collection,
   getDocs,
-} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+  query,
+  where,
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import {
   onAuthStateChanged,
   signOut,
-} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
 // ─────────────────────────────────────────
 //   AUTH — Nav bar switching + Log Out
 // ─────────────────────────────────────────
 const nav = document.querySelector("nav");
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-    nav.innerHTML = `
-      <a href="#" class="active">Home</a>
-      <a href="#" class="btn-logout" id="logoutBtn">Log Out</a>
-    `;
+    // Check if user has any bookings
+    const hasBookings = await checkUserHasBookings(user.uid);
+
+    if (hasBookings) {
+      // Show Home + Bookings + Log Out
+      nav.innerHTML = `
+        <a href="#" class="active">Home</a>
+        <a href="/SPCK/HTML/mybookings.html">Bookings</a>
+        <a href="#" class="btn-logout" id="logoutBtn">Log Out</a>
+      `;
+    } else {
+      // Show Home + Log Out only
+      nav.innerHTML = `
+        <a href="#" class="active">Home</a>
+        <a href="#" class="btn-logout" id="logoutBtn">Log Out</a>
+      `;
+    }
+
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "/SPCK/HTML/signin.html";
     });
   } else {
+    // Not logged in — show Sign In + Sign Up
     nav.innerHTML = `
       <a href="#" class="active">Home</a>
       <a href="/SPCK/HTML/signin.html" class="btn-logout">Sign In</a>
@@ -31,6 +48,20 @@ onAuthStateChanged(auth, (user) => {
     `;
   }
 });
+
+// ─────────────────────────────────────────
+//   CHECK IF USER HAS BOOKINGS
+// ─────────────────────────────────────────
+async function checkUserHasBookings(uid) {
+  try {
+    const q = query(collection(db, "bookings"), where("userId", "==", uid));
+    const snapshot = await getDocs(q);
+    return !snapshot.empty;
+  } catch (error) {
+    console.error("Error checking bookings:", error);
+    return false;
+  }
+}
 
 // ─────────────────────────────────────────
 //   SLIDESHOW
@@ -146,7 +177,6 @@ function handleBooking(btn) {
     return;
   }
 
-  // Get movie data from the card's data attributes
   const card = btn.closest(".movie-card");
   const title = card.querySelector(".movie-title").textContent;
   const poster = card.dataset.poster;
@@ -155,7 +185,6 @@ function handleBooking(btn) {
   const duration = card.dataset.duration;
   const year = card.dataset.year;
 
-  // Build URL with all movie info
   const params = new URLSearchParams({
     title,
     poster,
@@ -164,7 +193,6 @@ function handleBooking(btn) {
     duration,
     year,
   });
-
   window.location.href = `roomchoosing.html?${params.toString()}`;
 }
 
