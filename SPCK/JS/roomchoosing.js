@@ -18,7 +18,7 @@ onAuthStateChanged(auth, (user) => {
     `;
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       await signOut(auth);
-      window.location.href = "/SPCK/HTML/signin.html";
+      window.location.href = "../SPCK/HTML/signin.html";
     });
   } else {
     nav.innerHTML = `

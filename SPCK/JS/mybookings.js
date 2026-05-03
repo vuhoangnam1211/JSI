@@ -21,14 +21,14 @@ onAuthStateChanged(auth, async (user) => {
 
   if (!user) {
     // Not logged in — redirect to sign in
-    window.location.href = "/SPCK/HTML/signin.html";
+    window.location.href = "../SPCK/HTML/signin.html";
     return;
   }
 
   // Logged in — set up log out button
   document.getElementById("logoutBtn").addEventListener("click", async () => {
     await signOut(auth);
-    window.location.href = "/SPCK/HTML/signin.html";
+    window.location.href = "../SPCK/HTML/signin.html";
   });
 
   // Load their bookings
