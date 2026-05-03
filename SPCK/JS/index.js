@@ -31,7 +31,7 @@ onAuthStateChanged(auth, async (user) => {
     let navHTML = `<a href="#" class="active">Home</a>`;
 
     if (isAdmin) {
-      navHTML += `<a href="/SPCK/HTML/admin.html" style="color:var(--gold);">Admin Panel</a>`;
+      navHTML += `<a href="./HTML/admin.html" style="color:var(--gold);">Admin Panel</a>`;
     }
 
     if (hasBookings) {
