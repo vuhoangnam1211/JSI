@@ -35,7 +35,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     if (hasBookings) {
-      m;
       navHTML += `<a href="/SPCK/HTML/mybookings.html">Bookings</a>`;
     }
 
