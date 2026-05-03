@@ -31,13 +31,12 @@ onAuthStateChanged(auth, async (user) => {
     let navHTML = `<a href="#" class="active">Home</a>`;
 
     if (isAdmin) {
-      document.getElementById("adminLink")?.addEventListener("click", () => {
-        window.location.href = "/SPCK/HTML/admin.html";
-      });
+      navHTML += `<a href="../HTML/admin.html" style="color:var(--gold);">Admin Panel</a>`;
     }
 
     if (hasBookings) {
-      navHTML += `<a href="../SPCK/HTML/mybookings.html">Bookings</a>`;
+      m;
+      navHTML += `<a href="/SPCK/HTML/mybookings.html">Bookings</a>`;
     }
 
     navHTML += `<a href="#" class="btn-logout" id="logoutBtn">Log Out</a>`;
