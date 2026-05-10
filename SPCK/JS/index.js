@@ -38,7 +38,7 @@ onAuthStateChanged(auth, async (user) => {
       navHTML += `<a href="../HTML/mybookings.html">Bookings</a>`;
     }
 
-    navHTML += `<a href="#" class="btn-logout" id="logoutBtn">Log Out</a>`;
+    navHTML += `<a href="../HTML/signin.html" class="btn-logout" id="logoutBtn">Log Out</a>`;
 
     nav.innerHTML = navHTML;
 
