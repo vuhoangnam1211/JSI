@@ -11,8 +11,7 @@ import {
   updateDoc,
   deleteDoc,
   doc,
-  query,
-  where,
+  writeBatch,
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 import {
   onAuthStateChanged,
@@ -24,19 +23,167 @@ let currentUser = null;
 let isManager = false;
 let confirmCallback = null;
 
+// ─────────────────────────────────────────
+//   SCHEDULE CONFIG
+// ─────────────────────────────────────────
+const ROOM_SCHEDULES = {
+  1: [
+    ["10:00", "13:30", "19:30"],
+    ["09:00", "12:30", "16:00", "20:00"],
+    ["11:00", "14:30", "18:00"],
+    ["10:00", "13:00", "17:30", "21:00"],
+    ["09:30", "12:00", "15:30", "19:00"],
+    ["10:00", "14:00", "20:30"],
+    ["11:30", "15:00", "18:30", "22:00"],
+  ],
+  2: [
+    ["12:00", "15:30", "20:00"],
+    ["10:00", "14:00", "18:30"],
+    ["09:00", "13:00", "17:00", "21:00"],
+    ["11:00", "15:00", "19:30"],
+    ["10:30", "14:30", "20:00"],
+    ["09:30", "13:30", "17:30"],
+    ["12:00", "16:00", "21:30"],
+  ],
+  3: [
+    ["17:30", "21:00"],
+    ["13:00", "18:00"],
+    ["14:30", "19:00"],
+    ["11:30", "16:30", "21:00"],
+    ["12:00", "17:00"],
+    ["13:30", "18:30"],
+    ["15:00", "20:00"],
+  ],
+  4: [
+    ["10:30", "14:30", "18:00", "21:30"],
+    ["09:00", "13:00", "17:00", "21:00"],
+    ["10:00", "14:00", "18:30"],
+    ["11:00", "15:00", "19:00"],
+    ["09:30", "13:30", "17:30", "21:00"],
+    ["10:30", "14:30", "19:30"],
+    ["12:00", "16:00", "20:00"],
+  ],
+  5: [
+    ["13:00", "20:30"],
+    ["14:00", "19:00"],
+    ["12:30", "18:00"],
+    ["13:30", "20:00"],
+    ["15:00", "21:00"],
+    ["12:00", "17:30"],
+    ["14:30", "19:30"],
+  ],
+  6: [
+    ["09:30", "12:30", "16:30", "19:00"],
+    ["10:00", "13:00", "17:00", "21:00"],
+    ["09:00", "12:00", "16:00", "20:00"],
+    ["10:30", "14:00", "18:00"],
+    ["11:00", "15:00", "19:30"],
+    ["09:30", "13:30", "17:30", "21:30"],
+    ["10:00", "14:30", "19:00"],
+  ],
+  7: [
+    ["14:00", "18:30", "22:00"],
+    ["13:00", "17:00", "21:00"],
+    ["12:00", "16:30", "20:30"],
+    ["14:30", "18:00", "22:00"],
+    ["13:30", "17:30", "21:30"],
+    ["12:30", "16:00", "20:00"],
+    ["14:00", "18:30", "22:30"],
+  ],
+  8: [
+    ["19:00"],
+    ["17:30", "21:30"],
+    ["18:00", "22:00"],
+    ["16:00", "20:30"],
+    ["17:00", "21:00"],
+    ["18:30"],
+    ["19:30", "22:30"],
+  ],
+  9: [
+    ["09:00", "13:00", "17:00", "21:00"],
+    ["10:00", "14:00", "18:00", "22:00"],
+    ["09:30", "13:30", "17:30", "21:30"],
+    ["10:30", "14:30", "18:30"],
+    ["09:00", "13:00", "17:00", "21:00"],
+    ["11:00", "15:00", "19:00"],
+    ["10:00", "14:00", "18:00", "22:00"],
+  ],
+  10: [
+    ["12:00", "16:00", "20:00"],
+    ["13:00", "17:00", "21:00"],
+    ["12:30", "16:30", "20:30"],
+    ["14:00", "18:00"],
+    ["13:30", "17:30", "21:30"],
+    ["12:00", "16:00", "20:00"],
+    ["14:30", "19:00"],
+  ],
+};
+
+const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+function getNext7Dates() {
+  const dates = [];
+  const today = new Date();
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    dates.push(`${d.getDate()} ${MONTHS[d.getMonth()]}`);
+  }
+  return dates;
+}
+
+// Auto-generate 70 schedule docs for a movie (7 days × 10 rooms)
+async function generateSchedulesForMovie(movieTitle) {
+  const dates = getNext7Dates();
+  const entries = [];
+
+  for (const [roomNum, schedule] of Object.entries(ROOM_SCHEDULES)) {
+    for (let d = 0; d < dates.length; d++) {
+      entries.push({
+        movie: movieTitle,
+        room: String(roomNum),
+        date: dates[d],
+        times: schedule[d],
+      });
+    }
+  }
+
+  // Firestore batch limit is 500 — process in chunks of 490 to be safe
+  for (let i = 0; i < entries.length; i += 490) {
+    const batch = writeBatch(db);
+    const chunk = entries.slice(i, i + 490);
+    chunk.forEach((entry) => {
+      const newDocRef = doc(collection(db, "schedules"));
+      batch.set(newDocRef, entry);
+    });
+    await batch.commit();
+  }
+}
+
 // ─── Auth Guard ──────────────────────────
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    window.location.href = "sign.html";
+    window.location.href = "signin.html";
     return;
   }
 
-  // Check if user is in admins collection
   const adminRef = doc(db, "admins", user.uid);
   const adminSnap = await getDoc(adminRef);
 
   if (!adminSnap.exists()) {
-    // Not an admin — redirect
     alert("Access denied. You are not an admin.");
     window.location.href = "main.html";
     return;
@@ -45,21 +192,17 @@ onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   isManager = adminSnap.data().isManager === true;
 
-  // Update UI based on role
   const badge = document.getElementById("roleBadge");
   badge.textContent = isManager ? "Manager" : "Admin";
   if (isManager) badge.classList.add("manager");
 
-  // Show Add Admin button only for managers
   if (isManager) {
     document.getElementById("addAdminBtn").style.display = "flex";
   }
 
-  // Show main content
   document.getElementById("adminLoading").style.display = "none";
   document.getElementById("adminMain").style.display = "block";
 
-  // Load initial data
   loadMovies();
 });
 
@@ -81,7 +224,6 @@ window.switchTab = function (tab) {
   document
     .getElementById("tabUsers")
     .classList.toggle("active", tab === "users");
-
   if (tab === "users") loadUsers();
 };
 
@@ -107,7 +249,6 @@ async function loadMovies() {
     snapshot.forEach((docSnap) => {
       const m = docSnap.data();
       const id = docSnap.id;
-
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>
@@ -208,11 +349,15 @@ window.saveMovie = async function () {
 
   try {
     if (docId) {
+      // Editing — just update movie, no new schedules
       await updateDoc(doc(db, "movies", docId), data);
       showToast("Movie updated!", "success");
     } else {
+      // New movie — save + auto-generate 70 schedules
       await addDoc(collection(db, "movies"), data);
-      showToast("Movie added!", "success");
+      btn.textContent = "Generating schedules...";
+      await generateSchedulesForMovie(data.title);
+      showToast(`"${data.title}" added with schedules!`, "success");
     }
     closeMovieModal();
     loadMovies();
@@ -266,10 +411,8 @@ async function loadUsers() {
       const id = docSnap.id;
       const isSelf = currentUser && u.uid === currentUser.uid;
       const userIsManager = u.isManager === true;
-
       const tr = document.createElement("tr");
 
-      // Action buttons — only managers can promote/demote, and can't demote themselves
       let actionBtns = "";
       if (isManager && !isSelf) {
         if (userIsManager) {
@@ -334,24 +477,14 @@ window.saveNewAdmin = async function () {
   }
 
   try {
-    // Use uid as the document ID so auth guard works
-    await updateDoc(doc(db, "admins", uid), {
+    const { setDoc } =
+      await import("https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js");
+    await setDoc(doc(db, "admins", uid), {
       uid,
       email,
       isManager: roleVal === "true",
       promotedBy: currentUser.email,
-    }).catch(async () => {
-      // If doc doesn't exist, create it
-      const { setDoc } =
-        await import("https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js");
-      await setDoc(doc(db, "admins", uid), {
-        uid,
-        email,
-        isManager: roleVal === "true",
-        promotedBy: currentUser.email,
-      });
     });
-
     showToast("Admin added!", "success");
     closeUserModal();
     loadUsers();
@@ -427,7 +560,6 @@ document.getElementById("confirmOkBtn").addEventListener("click", async () => {
   closeConfirm();
 });
 
-// Close modals on overlay click
 document.querySelectorAll(".modal-overlay").forEach((overlay) => {
   overlay.addEventListener("click", (e) => {
     if (e.target === overlay) overlay.style.display = "none";

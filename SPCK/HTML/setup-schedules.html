@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CineVerse — Schedule Setup</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 600px;
+        margin: 60px auto;
+        padding: 20px;
+        background: #1a0a08;
+        color: #faf0e8;
+      }
+      h1 { color: #c0392b; margin-bottom: 8px; }
+      p  { color: rgba(255,255,255,0.6); margin-bottom: 24px; font-size: 14px; }
+      button {
+        width: 100%;
+        padding: 16px;
+        background: #c0392b;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      button:disabled { opacity: 0.5; cursor: not-allowed; }
+      #log {
+        margin-top: 24px;
+        background: #0a0404;
+        border-radius: 10px;
+        padding: 16px;
+        font-size: 13px;
+        line-height: 1.8;
+        max-height: 400px;
+        overflow-y: auto;
+        color: #b09080;
+      }
+      .ok  { color: #27ae60; }
+      .err { color: #e74c3c; }
+      .done { color: #f0b429; font-weight: 700; font-size: 15px; }
+    </style>
+  </head>
+  <body>
+    <h1>CineVerse Schedule Setup</h1>
+    <p>
+      Click the button below to automatically create all 420 schedule
+      documents in Firestore. This only needs to be run once.
+      Delete this file afterwards.
+    </p>
+    <button id="runBtn" onclick="runSetup()">▶ Create All Schedules</button>
+    <div id="log"></div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+      } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBpC_RSKp0qCtO2BOS1rUmjv12wyN3OpE0",
+        authDomain: "jsi13-c67f2.firebaseapp.com",
+        projectId: "jsi13-c67f2",
+        storageBucket: "jsi13-c67f2.firebasestorage.app",
+        messagingSenderId: "107804399992",
+        appId: "1:107804399992:web:8ff1623a53b05a67bcd08d",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db  = getFirestore(app);
+
+      // ── Movies ──
+      const MOVIES = [
+        "The Godfather",
+        "Interstellar",
+        "The Dark Knight",
+        "The Matrix",
+        "The Shawshank Redemption",
+        "Pulp Fiction",
+      ];
+
+      // ── Dates (next 7 days from 10 May 2026) ──
+      const DATES = [
+        "10 May","11 May","12 May","13 May","14 May","15 May","16 May",
+      ];
+
+      // ── Room schedules per date index (0=10May … 6=16May) ──
+      // Each room has a fixed set of times per day-of-week pattern
+      const ROOM_SCHEDULES = {
+        1:  [
+          ["10:00","13:30","19:30"],
+          ["09:00","12:30","16:00","20:00"],
+          ["11:00","14:30","18:00"],
+          ["10:00","13:00","17:30","21:00"],
+          ["09:30","12:00","15:30","19:00"],
+          ["10:00","14:00","20:30"],
+          ["11:30","15:00","18:30","22:00"],
+        ],
+        2:  [
+          ["12:00","15:30","20:00"],
+          ["10:00","14:00","18:30"],
+          ["09:00","13:00","17:00","21:00"],
+          ["11:00","15:00","19:30"],
+          ["10:30","14:30","20:00"],
+          ["09:30","13:30","17:30"],
+          ["12:00","16:00","21:30"],
+        ],
+        3:  [
+          ["17:30","21:00"],
+          ["13:00","18:00"],
+          ["14:30","19:00"],
+          ["11:30","16:30","21:00"],
+          ["12:00","17:00"],
+          ["13:30","18:30"],
+          ["15:00","20:00"],
+        ],
+        4:  [
+          ["10:30","14:30","18:00","21:30"],
+          ["09:00","13:00","17:00","21:00"],
+          ["10:00","14:00","18:30"],
+          ["11:00","15:00","19:00"],
+          ["09:30","13:30","17:30","21:00"],
+          ["10:30","14:30","19:30"],
+          ["12:00","16:00","20:00"],
+        ],
+        5:  [
+          ["13:00","20:30"],
+          ["14:00","19:00"],
+          ["12:30","18:00"],
+          ["13:30","20:00"],
+          ["15:00","21:00"],
+          ["12:00","17:30"],
+          ["14:30","19:30"],
+        ],
+        6:  [
+          ["09:30","12:30","16:30","19:00"],
+          ["10:00","13:00","17:00","21:00"],
+          ["09:00","12:00","16:00","20:00"],
+          ["10:30","14:00","18:00"],
+          ["11:00","15:00","19:30"],
+          ["09:30","13:30","17:30","21:30"],
+          ["10:00","14:30","19:00"],
+        ],
+        7:  [
+          ["14:00","18:30","22:00"],
+          ["13:00","17:00","21:00"],
+          ["12:00","16:30","20:30"],
+          ["14:30","18:00","22:00"],
+          ["13:30","17:30","21:30"],
+          ["12:30","16:00","20:00"],
+          ["14:00","18:30","22:30"],
+        ],
+        8:  [
+          ["19:00"],
+          ["17:30","21:30"],
+          ["18:00","22:00"],
+          ["16:00","20:30"],
+          ["17:00","21:00"],
+          ["18:30"],
+          ["19:30","22:30"],
+        ],
+        9:  [
+          ["09:00","13:00","17:00","21:00"],
+          ["10:00","14:00","18:00","22:00"],
+          ["09:30","13:30","17:30","21:30"],
+          ["10:30","14:30","18:30"],
+          ["09:00","13:00","17:00","21:00"],
+          ["11:00","15:00","19:00"],
+          ["10:00","14:00","18:00","22:00"],
+        ],
+        10: [
+          ["12:00","16:00","20:00"],
+          ["13:00","17:00","21:00"],
+          ["12:30","16:30","20:30"],
+          ["14:00","18:00"],
+          ["13:30","17:30","21:30"],
+          ["12:00","16:00","20:00"],
+          ["14:30","19:00"],
+        ],
+      };
+
+      window.runSetup = async function () {
+        const btn = document.getElementById("runBtn");
+        const log = document.getElementById("log");
+        btn.disabled = true;
+        log.innerHTML = "";
+
+        let total   = 0;
+        let success = 0;
+        let failed  = 0;
+
+        for (const movie of MOVIES) {
+          for (const [roomNum, schedule] of Object.entries(ROOM_SCHEDULES)) {
+            for (let d = 0; d < DATES.length; d++) {
+              const date  = DATES[d];
+              const times = schedule[d];
+              total++;
+
+              try {
+                await addDoc(collection(db, "schedules"), {
+                  movie,
+                  room:  String(roomNum),
+                  date,
+                  times,
+                });
+                success++;
+                log.innerHTML += `<span class="ok">✓</span> ${movie} · Room ${roomNum} · ${date}<br>`;
+              } catch (err) {
+                failed++;
+                log.innerHTML += `<span class="err">✗ FAILED</span> ${movie} · Room ${roomNum} · ${date} — ${err.message}<br>`;
+              }
+
+              // Auto-scroll log
+              log.scrollTop = log.scrollHeight;
+
+              // Small delay to avoid hitting Firestore rate limits
+              await new Promise((r) => setTimeout(r, 200));
+            }
+          }
+        }
+
+        log.innerHTML += `<br><span class="done">
+          Done! ${success} created, ${failed} failed out of ${total} total.
+          You can now delete this file.
+        </span>`;
+        btn.textContent = "✓ Complete";
+      };
+    </script>
+  </body>
+</html>

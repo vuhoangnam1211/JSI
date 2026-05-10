@@ -6,22 +6,33 @@
     <title>CineVerse - Select Seats</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="../CSS/style.css" />
     <link rel="stylesheet" href="../CSS/seats.css" />
   </head>
   <body>
-
     <!-- ═══ HEADER ═══ -->
     <header>
       <a class="nav-brand" href="../HTML/main.html">
-        <img class="nav-logo" src="https://img.icons8.com/fluency/96/cinema-.png" alt="CineVerse Logo" />
+        <img
+          class="nav-logo"
+          src="https://img.icons8.com/fluency/96/cinema-.png"
+          alt="CineVerse Logo"
+        />
         <span class="nav-title">Cine<span>Verse</span></span>
       </a>
       <div class="search-box">
         <input type="text" placeholder="Search movies, genres, actors..." />
         <button>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
@@ -73,13 +84,19 @@
 
     <!-- ═══ MAIN LAYOUT ═══ -->
     <div class="seat-page-layout">
-
       <div class="cinema-area">
         <div class="room-badge" id="roomBadge">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <rect x="2" y="3" width="20" height="14" rx="2"/>
-            <line x1="8" y1="21" x2="16" y2="21"/>
-            <line x1="12" y1="17" x2="12" y2="21"/>
+          <svg
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <rect x="2" y="3" width="20" height="14" rx="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
           </svg>
           Room —
         </div>
@@ -90,10 +107,26 @@
         </div>
 
         <div class="legend">
-          <div class="legend-item"><div class="legend-dot available"></div> Available</div>
-          <div class="legend-item"><div class="legend-dot selected"></div> Selected</div>
-          <div class="legend-item"><div class="legend-dot taken"></div> Taken</div>
-          <div class="legend-item"><div class="legend-dot vip"></div> VIP</div>
+          <div class="legend-item">
+            <div class="legend-dot available"></div>
+            Available
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot selected"></div>
+            Selected
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot taken"></div>
+            Taken
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot vip"></div>
+            VIP
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot booked-by-you"></div>
+            Yours
+          </div>
         </div>
 
         <div class="seat-grid" id="seatGrid"></div>
@@ -123,7 +156,14 @@
           <span class="label">Seats</span>
           <div class="value">
             <div class="selected-seats-display" id="selectedDisplay">
-              <span style="color:var(--text-muted);font-size:12px;font-weight:400;">None selected</span>
+              <span
+                style="
+                  color: var(--text-muted);
+                  font-size: 12px;
+                  font-weight: 400;
+                "
+                >None selected</span
+              >
             </div>
           </div>
         </div>
@@ -133,10 +173,11 @@
           <span class="total-amount" id="totalPrice">$0.00</span>
         </div>
 
-        <button class="btn-confirm" id="confirmBtn" disabled>Confirm Seats</button>
+        <button class="btn-confirm" id="confirmBtn" disabled>
+          Confirm Seats
+        </button>
         <a href="javascript:history.back()" class="btn-back">← Change Room</a>
       </div>
-
     </div>
 
     <!-- ═══ FOOTER ═══ -->

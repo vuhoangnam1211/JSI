@@ -1,6 +1,6 @@
-/* ─────────────────────────────────────────
-   CineVerse — seats.js  (Select Seats)
-───────────────────────────────────────── */
+// ─────────────────────────────────────────
+//   CineVerse — seats.js
+// ─────────────────────────────────────────
 
 import { auth, db } from "./firebase.js";
 import {
@@ -9,6 +9,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 import {
   collection,
+  query,
+  where,
+  getDocs,
   addDoc,
   serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
@@ -16,7 +19,7 @@ import {
 (function () {
   "use strict";
 
-  /* ── Configuration ── */
+  // ── Configuration ──
   const ROWS = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const SEATS_PER_ROW = 8;
   const TICKET_PRICE = 12.5;
@@ -36,29 +39,7 @@ import {
     10: "VIP Lounge",
   };
 
-  const TAKEN_SEATS = new Set([
-    "A3",
-    "A4",
-    "B1",
-    "B6",
-    "B7",
-    "C2",
-    "C3",
-    "C5",
-    "D4",
-    "D5",
-    "E1",
-    "E7",
-    "E8",
-    "F2",
-    "F3",
-    "G6",
-    "H2",
-    "H3",
-    "H4",
-  ]);
-
-  /* ── Read ALL data from URL ── */
+  // ── Read data from URL ──
   const params = new URLSearchParams(window.location.search);
   const title = params.get("title") || "Unknown Movie";
   const poster = params.get("poster") || "";
@@ -71,19 +52,21 @@ import {
   const date = params.get("date") || "Today";
   const roomType = ROOM_TYPES[roomNum] || "Standard";
 
-  /* ── State ── */
+  // ── State ──
   let selectedSeats = new Set();
+  let takenSeats = new Set(); // loaded from Firestore
+  let mySeats = new Set(); // seats booked by current user
   let currentUser = null;
 
-  /* ── DOM references ── */
+  // ── DOM ──
   const seatGrid = document.getElementById("seatGrid");
   const roomBadge = document.getElementById("roomBadge");
   const selectedDisplay = document.getElementById("selectedDisplay");
   const totalPriceEl = document.getElementById("totalPrice");
   const confirmBtn = document.getElementById("confirmBtn");
 
-  /* ── Auth guard + Nav bar ── */
-  onAuthStateChanged(auth, (user) => {
+  // ── Auth guard ──
+  onAuthStateChanged(auth, async (user) => {
     const nav = document.querySelector("nav");
     currentUser = user;
 
@@ -100,7 +83,12 @@ import {
         });
 
       initPage();
+
+      // Load taken seats from Firestore, then build grid
+      seatGrid.innerHTML = `<p style="color:var(--text-muted);padding:20px;">Loading seats...</p>`;
+      await loadTakenSeats();
       buildSeatGrid();
+
       if (confirmBtn) confirmBtn.addEventListener("click", handleConfirm);
     } else {
       nav.innerHTML = `
@@ -108,27 +96,22 @@ import {
         <a href="/SPCK/HTML/signin.html" class="btn-logout">Sign In</a>
         <a href="/SPCK/HTML/signup.html" class="btn-logout">Sign Up</a>
       `;
-
-      if (seatGrid) {
-        seatGrid.innerHTML = `
-          <div style="text-align:center; padding: 40px 20px;">
-            <p style="font-size:18px; font-weight:600; color:var(--text); margin-bottom:12px;">🔒 Please sign in to select seats</p>
-            <p style="font-size:14px; color:var(--text-muted); margin-bottom:20px;">You need an account to book tickets.</p>
-            <a href="/SPCK/HTML/signin.html" style="background:var(--accent);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Sign In</a>
-          </div>
-        `;
-      }
-
+      seatGrid.innerHTML = `
+        <div style="text-align:center;padding:40px 20px;">
+          <p style="font-size:18px;font-weight:600;color:var(--text);margin-bottom:12px;">🔒 Please sign in to select seats</p>
+          <p style="font-size:14px;color:var(--text-muted);margin-bottom:20px;">You need an account to book tickets.</p>
+          <a href="/SPCK/HTML/signin.html" style="background:var(--accent);color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">Sign In</a>
+        </div>
+      `;
       if (confirmBtn) {
         confirmBtn.disabled = true;
         confirmBtn.textContent = "Sign in to confirm";
       }
-
       initPage();
     }
   });
 
-  /* ── Populate hero + summary with URL data ── */
+  // ── Populate hero + summary ──
   function initPage() {
     const heroPoster = document.getElementById("hero-poster");
     const heroTitle = document.getElementById("hero-title");
@@ -144,7 +127,7 @@ import {
       <span class="tag-pill accent">${age}</span>
       <span class="tag-pill">${genre}</span>
       <span class="tag-pill">${duration} min</span>
-      <span class="tag-pill" id="room-tag">Room ${roomNum}</span>
+      <span class="tag-pill">Room ${roomNum}</span>
       <span class="tag-pill">${time}</span>
     `;
 
@@ -163,16 +146,49 @@ import {
     if (summaryTime) summaryTime.textContent = time;
   }
 
-  /* ── Build seat grid ── */
+  // ── Load taken seats from Firestore ──
+  // A seat is "taken" if it appears in any booking for this movie + room + date + time
+  async function loadTakenSeats() {
+    try {
+      const q = query(
+        collection(db, "bookings"),
+        where("movie", "==", title),
+        where("date", "==", date),
+        where("time", "==", time),
+      );
+      const snapshot = await getDocs(q);
+
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        // Match room — bookings store "Room 1 · Standard" or just "1"
+        const bookingRoom = String(data.room)
+          .replace(/Room\s*/i, "")
+          .split("·")[0]
+          .trim();
+        if (bookingRoom === String(roomNum)) {
+          const seats = Array.isArray(data.seats) ? data.seats : [data.seats];
+          seats.forEach((s) => takenSeats.add(s));
+          if (data.userId === currentUser?.uid) {
+            seats.forEach((s) => mySeats.add(s));
+          }
+        }
+      });
+    } catch (err) {
+      console.error("Failed to load taken seats:", err);
+    }
+  }
+
+  // ── Build seat grid ──
   function buildSeatGrid() {
     if (!seatGrid) return;
+    seatGrid.innerHTML = "";
 
+    // Column number headers
     const headerRow = document.createElement("div");
     headerRow.className = "seat-row";
     const emptyLabel = document.createElement("div");
     emptyLabel.className = "row-label";
     headerRow.appendChild(emptyLabel);
-
     for (let s = 1; s <= SEATS_PER_ROW; s++) {
       if (s === 5) headerRow.appendChild(createGap());
       const lbl = document.createElement("div");
@@ -198,19 +214,30 @@ import {
         if (s === 5) rowEl.appendChild(createGap());
 
         const seatId = `${row}${s}`;
-        const isTaken = TAKEN_SEATS.has(seatId);
+        const isTaken = takenSeats.has(seatId);
+        const isMysSeat = mySeats.has(seatId);
 
         const seat = document.createElement("div");
-        seat.className = ["seat", isVip ? "vip" : "", isTaken ? "taken" : ""]
+        seat.className = [
+          "seat",
+          isVip ? "vip" : "",
+          isTaken ? "taken" : "",
+          isMysSeat ? "booked-by-you" : "",
+        ]
           .filter(Boolean)
           .join(" ");
-
         seat.textContent = s;
         seat.dataset.id = seatId;
         seat.setAttribute(
           "aria-label",
           `Seat ${seatId}${isTaken ? " (taken)" : ""}`,
         );
+        if (isMysSeat) {
+          const tooltip = document.createElement("div");
+          tooltip.className = "seat-tooltip";
+          tooltip.textContent = "Booked by you";
+          seat.appendChild(tooltip);
+        }
 
         if (!isTaken) {
           seat.addEventListener("click", () => toggleSeat(seat, seatId, isVip));
@@ -229,7 +256,7 @@ import {
     return gap;
   }
 
-  /* ── Toggle seat ── */
+  // ── Toggle seat ──
   function toggleSeat(el, id, isVip) {
     if (selectedSeats.has(id)) {
       selectedSeats.delete(id);
@@ -241,7 +268,7 @@ import {
     updateSummary();
   }
 
-  /* ── Update summary ── */
+  // ── Update summary panel ──
   function updateSummary() {
     if (selectedSeats.size === 0) {
       selectedDisplay.innerHTML =
@@ -266,7 +293,7 @@ import {
     confirmBtn.disabled = false;
   }
 
-  /* ── Confirm booking — saves to Firestore ── */
+  // ── Confirm booking ──
   async function handleConfirm() {
     if (!currentUser) {
       alert("Please sign in to confirm your booking.");
@@ -279,7 +306,6 @@ import {
       0,
     );
 
-    // Disable button while saving
     confirmBtn.disabled = true;
     confirmBtn.textContent = "Saving...";
 
@@ -288,7 +314,7 @@ import {
         userId: currentUser.uid,
         userEmail: currentUser.email,
         movie: title,
-        room: `Room ${roomNum} · ${roomType}`,
+        room: String(roomNum),
         date: date,
         time: time,
         seats: seats,
@@ -300,7 +326,6 @@ import {
         `Booking confirmed! ✅\n\nMovie: ${title}\nRoom: ${roomNum} · ${roomType}\nDate: ${date}\nShowtime: ${time}\nSeats: ${seats.join(", ")}\nTotal: $${total.toFixed(2)}\n\nThank you!`,
       );
 
-      // Redirect to home after booking
       window.location.href = "main.html";
     } catch (error) {
       console.error("Booking error:", error);
