@@ -44,14 +44,14 @@ onAuthStateChanged(auth, async (user) => {
 
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       await signOut(auth);
-      window.location.href = "/SPCK/HTML/signin.html";
+      window.location.href = "../HTML/signin.html";
     });
   } else {
     // Not logged in — show Sign In + Sign Up
     nav.innerHTML = `
       <a href="#" class="active">Home</a>
-      <a href="/SPCK/HTML/signin.html" class="btn-logout">Sign In</a>
-      <a href="/SPCK/HTML/signup.html" class="btn-logout">Sign Up</a>
+      <a href="../HTML/signin.html" class="btn-logout">Sign In</a>
+      <a href="../HTML/signup.html" class="btn-logout">Sign Up</a>
     `;
   }
 });
